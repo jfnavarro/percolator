@@ -23,43 +23,45 @@ using namespace std;
 
 typedef enum {FALSE_IF_SET=0, TRUE_IF_SET, VALUE, MAYBE} OptionOption;
 
-class Option
-{
-  public:
-    Option(string shrt, string lng, string dest,string hlp="",string hlpType="", OptionOption type=VALUE, string defau="");
-    ~Option();
-    bool operator == (const string & option);
-    OptionOption type;
-    string shortOpt;
-    string longOpt;
-    string help;
-    string name;
-    string helpType;
-    string deflt;
+class Option {
+public:
+  Option(string shrt, string lng, string dest,string hlp="",string hlpType="", OptionOption type=VALUE, string defau="");
+  ~Option();
+  bool operator == (const string & option);
+  OptionOption type;
+  string shortOpt;
+  string longOpt;
+  string help;
+  string name;
+  string helpType;
+  string deflt;
 };
 
-class CommandLineParser
-{
-  public:
-    CommandLineParser(string usage="", string tail="");
-    ~CommandLineParser();
-    void error(string msg);
-    void defineOption(string shortOpt, string longOpt, string help="", string helpType="", OptionOption type=VALUE,string defaultVal="");
-    void defineOption(string shortOpt, string longOpt, string help, string helpType, string defaultVal) {defineOption(shortOpt,longOpt,help,helpType, VALUE,defaultVal);}
-    void parseArgs(int argc, char **argv);
-    bool optionSet(string dest) {return (options[dest].length()>0);}
-    double getDouble(string dest,double lower,double upper);
-    int getInt(string dest,int lower,int upper);
-    void help();
-    void htmlHelp();
-    map<string,string> options;
-    vector<string> arguments;
-  private:
-        unsigned int optMaxLen;
-        const static unsigned int lineLen = 80;
-    string header, endnote;
-    vector<Option> opts;
-    void findOption (char **argv, int &index);
+class CommandLineParser {
+public:
+  CommandLineParser(string usage="", string tail="");
+  ~CommandLineParser();
+  void error(string msg);
+  void defineOption(string shortOpt, string longOpt, string help="", string helpType="", OptionOption type=VALUE,string defaultVal="");
+  void defineOption(string shortOpt, string longOpt, string help, string helpType, string defaultVal) {
+    defineOption(shortOpt,longOpt,help,helpType, VALUE,defaultVal);
+  }
+  void parseArgs(int argc, char **argv);
+  bool optionSet(string dest) {
+    return (options[dest].length()>0);
+  }
+  double getDouble(string dest,double lower,double upper);
+  int getInt(string dest,int lower,int upper);
+  void help();
+  void htmlHelp();
+  map<string,string> options;
+  vector<string> arguments;
+private:
+  unsigned int optMaxLen;
+  const static unsigned int lineLen = 80;
+  string header, endnote;
+  vector<Option> opts;
+  void findOption (char **argv, int &index);
 };
 
 #endif /*OPTION_H_*/

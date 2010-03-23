@@ -11,8 +11,8 @@
  conditions:
 
  The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software. 
- 
+ included in all copies or substantial portions of the Software.
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -21,9 +21,9 @@
  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
- 
+
  $Id: Array.h,v 1.3 2009/01/09 14:41:00 lukall Exp $
- 
+
  *******************************************************************************/
 
 // this class behaves like vector, except it has
@@ -36,8 +36,7 @@
 #include <vector>
 
 template <typename T>
-class Array
-{
+class Array {
 public:
   // constructors
   Array():data() {}
@@ -69,7 +68,7 @@ public:
   class SizeException {};
   class ArrayFormatException {};
   class ResizeException {};
-  
+
 protected:
   // error checking functions
   void boundsCheck(int i) const;
@@ -79,7 +78,7 @@ protected:
 
 // non-member error checking functions
 template <typename T, typename R>
-  void sizeCheck(const Array<T> & lhs, const Array<R> & rhs);
+void sizeCheck(const Array<T> & lhs, const Array<R> & rhs);
 
 // concatonate
 template <typename T>
@@ -100,10 +99,10 @@ int indexOf(const Array<T> & lhs, const T & rhs);
 // unary mapping functions
 // distribute a unary function call over an array
 template <typename R, typename T>
-  Array<R> map( R (*func)(const T & lhs), const Array<T> & lhs);
+Array<R> map( R (*func)(const T & lhs), const Array<T> & lhs);
 
 template <typename R, typename T>
-  Array<R> map( R (*func)(T lhs), const Array<T> & lhs);
+Array<R> map( R (*func)(T lhs), const Array<T> & lhs);
 
 
 // binary mapping functions
@@ -112,23 +111,23 @@ template <typename R, typename T>
 
 // passed by const reference
 template <typename R, typename T, typename S>
-  Array<R> map( R (*func)(const T & lhs, const S & rhs), const Array<T> & lhs, const Array<S> & rhs);
+Array<R> map( R (*func)(const T & lhs, const S & rhs), const Array<T> & lhs, const Array<S> & rhs);
 
 template <typename R, typename T, typename S>
-  Array<R> map( R (*func)(const T & lhs, const S & rhs), const Array<T> & lhs, const S & rhs);
+Array<R> map( R (*func)(const T & lhs, const S & rhs), const Array<T> & lhs, const S & rhs);
 
 template <typename R, typename T, typename S>
-  Array<R> map(R (*func)(const T & parL, const S & parR), const T & lhs, const Array<S> & rhs);
+Array<R> map(R (*func)(const T & parL, const S & parR), const T & lhs, const Array<S> & rhs);
 
 // passed by value
 template <typename R, typename T, typename S>
-  Array<R> map( R (*func)(T parL, S parR), const Array<T> & lhs, const Array<S> & rhs);
+Array<R> map( R (*func)(T parL, S parR), const Array<T> & lhs, const Array<S> & rhs);
 
 template <typename R, typename T, typename S>
-  Array<R> map(R (*func)(T parL, S parR), const Array<T> & lhs, S rhs);
+Array<R> map(R (*func)(T parL, S parR), const Array<T> & lhs, S rhs);
 
 template <typename R, typename T, typename S>
-  Array<R> map(R (*func)(T parL, S parR), T lhs, const Array<S> & rhs);
+Array<R> map(R (*func)(T parL, S parR), T lhs, const Array<S> & rhs);
 
 // modify functions
 // these are the same as mapping functions, but they
@@ -136,23 +135,23 @@ template <typename R, typename T, typename S>
 
 // passed by const reference
 template <typename T, typename S>
-  void modify( void (*func)(T & lhs, const S & rhs), Array<T> & lhs, const Array<S> & rhs);
+void modify( void (*func)(T & lhs, const S & rhs), Array<T> & lhs, const Array<S> & rhs);
 
 template <typename T, typename S>
-  void modify( void (*func)(T & lhs, const S & rhs), Array<T> & lhs, const S & rhs);
+void modify( void (*func)(T & lhs, const S & rhs), Array<T> & lhs, const S & rhs);
 
 template <typename T, typename S>
-  void modify( void (*func)(T & lhs, const S & rhs), T & lhs, const Array<S> & rhs);
+void modify( void (*func)(T & lhs, const S & rhs), T & lhs, const Array<S> & rhs);
 
 // passed by value
 template <typename T, typename S>
-  void modify( void (*func)(T & lhs, S rhs), const Array<T> & lhs, const Array<S> & rhs);
+void modify( void (*func)(T & lhs, S rhs), const Array<T> & lhs, const Array<S> & rhs);
 
 template <typename T, typename S>
-  void modify( void (*func)(T & lhs, S rhs), const Array<T> & lhs, S rhs);
+void modify( void (*func)(T & lhs, S rhs), const Array<T> & lhs, S rhs);
 
 template <typename T, typename S>
-  void modify( void (*func)(T & lhs, S rhs), T & lhs, const Array<S> & rhs);
+void modify( void (*func)(T & lhs, S rhs), T & lhs, const Array<S> & rhs);
 
 // boolean such that
 // returns an ordered array of indices

@@ -23,61 +23,61 @@ using namespace std;
 #include "UniNormalizer.h"
 #include "SetHandler.h"
 
-UniNormalizer::UniNormalizer()
-{
+UniNormalizer::UniNormalizer() {
 }
 
-UniNormalizer::~UniNormalizer()
-{
+UniNormalizer::~UniNormalizer() {
 }
 
-void UniNormalizer::unnormalizeweight(const vector<double>& in,vector<double>& out){
+void UniNormalizer::unnormalizeweight(const vector<double>& in,vector<double>& out) {
   double sum = 0;
   unsigned int i=0;
-  for (;i<numFeatures;i++) {
-  	out[i]=in[i]/div[i];
-  	sum += sub[i]*in[i]/div[i];
+  for (; i<numFeatures; i++) {
+    out[i]=in[i]/div[i];
+    sum += sub[i]*in[i]/div[i];
   }
   out[i]=in[i]-sum;
 }
 
-void UniNormalizer::normalizeweight(const vector<double>& in, vector<double>& out){
+void UniNormalizer::normalizeweight(const vector<double>& in, vector<double>& out) {
   double sum = 0;
   size_t i=0;
-  for (;i<numFeatures;i++) {
-  	out[i]=in[i]*div[i];
-  	sum+=sub[i]*in[i];
+  for (; i<numFeatures; i++) {
+    out[i]=in[i]*div[i];
+    sum+=sub[i]*in[i];
   }
   out[i]=in[i]+sum;
 }
 
-void UniNormalizer::setSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV, size_t nf, size_t nrf){
-  numFeatures = nf; numRetentionFeatures=nrf;
-  sub.resize(nf+nrf,0.0); div.resize(nf+nrf,0.0);
+void UniNormalizer::setSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV, size_t nf, size_t nrf) {
+  numFeatures = nf;
+  numRetentionFeatures=nrf;
+  sub.resize(nf+nrf,0.0);
+  div.resize(nf+nrf,0.0);
   vector<double> mins(nf+nrf,1e+100), maxs(nf+nrf,-1e+100);
 
   double * features;
   size_t ix;
   vector<double *>::iterator it=featuresV.begin();
-  for (;it!=featuresV.end();++it) {
+  for (; it!=featuresV.end(); ++it) {
     features = *it;
-	for (ix=0;ix<numFeatures;ix++) {
-	    mins[ix]=min(features[ix],mins[ix]);
-	    maxs[ix]=max(features[ix],maxs[ix]);
+    for (ix=0; ix<numFeatures; ix++) {
+      mins[ix]=min(features[ix],mins[ix]);
+      maxs[ix]=max(features[ix],maxs[ix]);
     }
   }
-  for (it=rtFeaturesV.begin();it!=rtFeaturesV.end();++it) {
+  for (it=rtFeaturesV.begin(); it!=rtFeaturesV.end(); ++it) {
     features = *it;
-    for (ix=numFeatures;ix<numFeatures+numRetentionFeatures;++ix) {
-        mins[ix]=min(features[ix-numFeatures],mins[ix]);
-        maxs[ix]=max(features[ix-numFeatures],maxs[ix]);
+    for (ix=numFeatures; ix<numFeatures+numRetentionFeatures; ++ix) {
+      mins[ix]=min(features[ix-numFeatures],mins[ix]);
+      maxs[ix]=max(features[ix-numFeatures],maxs[ix]);
     }
   }
-  for (ix=0;ix<numFeatures+numRetentionFeatures;++ix) {
-  	sub[ix]=mins[ix];
-  	div[ix]=maxs[ix]-mins[ix];
-  	if (div[ix]<=0)
-  	  div[ix]=1.0;
+  for (ix=0; ix<numFeatures+numRetentionFeatures; ++ix) {
+    sub[ix]=mins[ix];
+    div[ix]=maxs[ix]-mins[ix];
+    if (div[ix]<=0)
+      div[ix]=1.0;
   }
 }
 

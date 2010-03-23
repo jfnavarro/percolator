@@ -23,8 +23,7 @@
 using namespace std;
 #include "LogisticRegression.h"
 
-class PosteriorEstimator
-{
+class PosteriorEstimator {
 public:
   PosteriorEstimator();
   virtual ~PosteriorEstimator();
@@ -37,11 +36,13 @@ public:
   static void getQValues(double pi0,const vector<pair<double,bool> >& combined, vector<double>& q);
   static void getQValuesFromP(double pi0,const vector<double>& p, vector<double>& q);
   static double estimatePi0(vector<double>& p, const unsigned int numBoot=100);
-  static void setReversed(bool status) {reversed = status;}
+  static void setReversed(bool status) {
+    reversed = status;
+  }
 protected:
   void finishStandalone(vector<pair<double,bool> >& combined, const vector<double>& peps, const vector<double>& p, double pi0);
   static void binData(const vector<pair<double,bool> >& combined, vector<double>& medians,
-               vector<unsigned int>& negatives, vector<unsigned int>& sizes);
+                      vector<unsigned int>& negatives, vector<unsigned int>& sizes);
   string targetFile,decoyFile;
   static bool reversed, pvalInput;
   string resultFileName;

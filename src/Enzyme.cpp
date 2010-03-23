@@ -30,19 +30,19 @@ void Enzyme::setEnzyme(EnzymeType enz) {
   if (theEnzyme) delete theEnzyme;
   theEnzyme=NULL;
   switch (enz) {
-    case CHYMOTRYPSIN:
-      theEnzyme = new Chymotrypsin();
-      return;
-    case ELASTASE:
-      theEnzyme = new Elastase();
-      return;
-    case NO_ENZYME:
-      theEnzyme = new Enzyme();
-      return;
-    case TRYPSIN:
-    default:
-      theEnzyme = new Trypsin;
-      return;
+  case CHYMOTRYPSIN:
+    theEnzyme = new Chymotrypsin();
+    return;
+  case ELASTASE:
+    theEnzyme = new Elastase();
+    return;
+  case NO_ENZYME:
+    theEnzyme = new Enzyme();
+    return;
+  case TRYPSIN:
+  default:
+    theEnzyme = new Trypsin;
+    return;
   }
 }
 

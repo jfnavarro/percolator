@@ -32,12 +32,15 @@ public:
   const double **vals;
   double *Y;   /* labels */
   double *C;   /* cost associated with each example */
-  void setCost(double pos, double neg) {int ix=0;for(;ix<negatives;++ix) C[ix]=neg;for(;ix<negatives+positives;++ix) C[ix]=pos; }
+  void setCost(double pos, double neg) {
+    int ix=0;
+    for(; ix<negatives; ++ix) C[ix]=neg;
+    for(; ix<negatives+positives; ++ix) C[ix]=pos;
+  }
 };
 
 /* Data: Input examples are stored in sparse (Compressed Row Storage) format */
-struct data
-{
+struct data {
   int m; /* number of examples */
   int l; /* number of labeled examples */
   int u; /* number of unlabeled examples l+u = m */
@@ -50,22 +53,19 @@ struct data
   double *C;   /* cost associated with each example */
 };
 
-struct vector_double /* defines a vector of doubles */
-{
+struct vector_double { /* defines a vector of doubles */
   int d; /* number of elements */
   double *vec; /* ptr to vector elements*/
 };
 
 
 
-struct vector_int /* defines a vector of ints for index subsets */
-{
+struct vector_int { /* defines a vector of ints for index subsets */
   int d; /* number of elements */
   int *vec; /* ptr to vector elements */
 };
 
-struct options
-{
+struct options {
   /* user options */
   double lambda; /* regularization parameter */
   double lambda_u; /* regularization parameter over unlabeled examples */
@@ -86,18 +86,30 @@ public:
   void reset_vectors() {
     times.erase(times.begin(), times.end());
   }
-  void restart() { start = clock(); }
-  void stop() { finish = clock(); }
-  double time() const { return ((double)(finish - start))/CLOCKS_PER_SEC; }
+  void restart() {
+    start = clock();
+  }
+  void stop() {
+    finish = clock();
+  }
+  double time() const {
+    return ((double)(finish - start))/CLOCKS_PER_SEC;
+  }
 };
 class Delta { /* used in line search */
- public:
-   Delta() {delta=0.0; index=0;s=0;};
-   double delta;
-   int index;
-   int s;
+public:
+  Delta() {
+    delta=0.0;
+    index=0;
+    s=0;
+  };
+  double delta;
+  int index;
+  int s;
 };
-inline bool operator<(const Delta& a , const Delta& b) { return (a.delta < b.delta);};
+inline bool operator<(const Delta& a , const Delta& b) {
+  return (a.delta < b.delta);
+};
 
 void Clear(struct data *a); /* deletes a */
 void Clear(struct vector_double *a); /* deletes a */
@@ -111,19 +123,19 @@ double norm_square(const vector_double *A); /* returns squared length of A */
 /* Solves: min_w 0.5*Options->lamda*w'*w + 0.5*sum_{i in Subset} Data->C[i] (Y[i]- w' x_i)^2 */
 /* over a subset of examples x_i specified by vector_int Subset */
 int CGLS(const AlgIn& set,
-     const double lambda,
-     const int cgitermax,
-     const double epsilon,
-     const struct vector_int *Subset,
-     struct vector_double *Weights,
-     struct vector_double *Outputs);
+         const double lambda,
+         const int cgitermax,
+         const double epsilon,
+         const struct vector_int *Subset,
+         struct vector_double *Weights,
+         struct vector_double *Outputs);
 
 /* Linear Modified Finite Newton L2-SVM*/
 /* Solves: min_w 0.5*Options->lamda*w'*w + 0.5*sum_i Data->C[i] max(0,1 - Y[i] w' x_i)^2 */
 int L2_SVM_MFN(const AlgIn& set,
-	       struct options *Options,
-	       struct vector_double *Weights,
-	       struct vector_double *Outputs);
+               struct options *Options,
+               struct vector_double *Weights,
+               struct vector_double *Outputs);
 double line_search(double *w,
                    double *w_bar,
                    double lambda,

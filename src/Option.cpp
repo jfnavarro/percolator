@@ -26,17 +26,15 @@ using namespace std;
 
 template <class T>
 bool from_string(T& t,
-                 const std::string& s)
-{
+                 const std::string& s) {
   std::istringstream iss(s);
   return !(iss >> t).fail();
 }
 
 
-void searchandreplace( string& source, const string& find, const string& replace )
-{
+void searchandreplace( string& source, const string& find, const string& replace ) {
   size_t j;
-  for (;(j = source.find( find )) != string::npos;)
+  for (; (j = source.find( find )) != string::npos;)
     source.replace( j, find.length(), replace );
 }
 
@@ -65,23 +63,23 @@ CommandLineParser::CommandLineParser(string usage, string tail) {
 
 CommandLineParser::~CommandLineParser() {}
 
-double CommandLineParser::getDouble(string dest,double lower,double upper){
-    double val;
-    from_string<double>(val, options[dest]);
-    if (!from_string<double>(val, options[dest]) || (val < lower || val > upper)) {
-      cerr << "-" << dest << " option requires a float between " << lower << " and " << upper << endl;
-      exit(-1);
-    }
-    return val;
+double CommandLineParser::getDouble(string dest,double lower,double upper) {
+  double val;
+  from_string<double>(val, options[dest]);
+  if (!from_string<double>(val, options[dest]) || (val < lower || val > upper)) {
+    cerr << "-" << dest << " option requires a float between " << lower << " and " << upper << endl;
+    exit(-1);
+  }
+  return val;
 }
 
 int CommandLineParser::getInt(string dest,int lower,int upper) {
-    int val;
-    if (!from_string<int>(val, options[dest]) || val < lower || val > upper) {
-      cerr << "-" << dest << " option requires an integer between " << lower << " and " << upper << endl;
-      exit(-1);
-    }
-    return val;
+  int val;
+  if (!from_string<int>(val, options[dest]) || val < lower || val > upper) {
+    cerr << "-" << dest << " option requires an integer between " << lower << " and " << upper << endl;
+    exit(-1);
+  }
+  return val;
 }
 
 
@@ -184,32 +182,32 @@ void CommandLineParser::findOption(char **argv, int &index) {
   for (unsigned int i = 0; i < opts.size(); i++) {
     if (opts[i] == optstr) {
       switch (opts[i].type) {
-        case FALSE_IF_SET:
-          options[opts[i].name] = "0";
-          break;
-        case TRUE_IF_SET:
-          options[opts[i].name] = "1";
-          break;
-        case VALUE:
-          if (valstr.length()>0) {
-            options[opts[i].name] = valstr;
-          } else {
-            options[opts[i].name] = argv[index+1];
-            index++;
-          }
-          break;
-        case MAYBE:
-          if (valstr.length()>0) {
-            options[opts[i].name] = valstr;
-          } else if (argv[index+1][0]!='-') {
-            options[opts[i].name] = argv[index+1];
-            index++;
-          } else {
-            options[opts[i].name] = opts[i].deflt;
-          }
-          break;
-        default:
-          break;
+      case FALSE_IF_SET:
+        options[opts[i].name] = "0";
+        break;
+      case TRUE_IF_SET:
+        options[opts[i].name] = "1";
+        break;
+      case VALUE:
+        if (valstr.length()>0) {
+          options[opts[i].name] = valstr;
+        } else {
+          options[opts[i].name] = argv[index+1];
+          index++;
+        }
+        break;
+      case MAYBE:
+        if (valstr.length()>0) {
+          options[opts[i].name] = valstr;
+        } else if (argv[index+1][0]!='-') {
+          options[opts[i].name] = argv[index+1];
+          index++;
+        } else {
+          options[opts[i].name] = opts[i].deflt;
+        }
+        break;
+      default:
+        break;
       };
       return;
     }

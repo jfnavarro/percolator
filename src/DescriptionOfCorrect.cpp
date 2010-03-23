@@ -33,12 +33,10 @@ float DescriptionOfCorrect::pKiso[7] = {-3.86,-4.25,-8.33,-10.0,6.0,10.5,12.4}; 
 float DescriptionOfCorrect::pKN = 9.69;
 float DescriptionOfCorrect::pKC = 2.34;
 
-DescriptionOfCorrect::DescriptionOfCorrect()
-{
+DescriptionOfCorrect::DescriptionOfCorrect() {
 }
 
-DescriptionOfCorrect::~DescriptionOfCorrect()
-{
+DescriptionOfCorrect::~DescriptionOfCorrect() {
 }
 
 void DescriptionOfCorrect::calcRegressionFeature(PSMDescription &psm) {
@@ -69,7 +67,8 @@ void DescriptionOfCorrect::trainCorrect() {
     dMSum += psms[ix].massDiff;
   }
   if (psms.size()==0) {
-    avgPI = 0.0; avgDM = 0.0;
+    avgPI = 0.0;
+    avgDM = 0.0;
   } else {
     avgPI = piSum/psms.size();
     avgDM = dMSum/psms.size();
@@ -106,7 +105,7 @@ double DescriptionOfCorrect::isoElectricPoint(const string& pep) {
   // Overall amino acid composition features
   string::size_type pos = isoAlphabet.size();
   vector<unsigned int> numAA(pos);
-  for (string::const_iterator it=pep.begin();it!=pep.end();it++) {
+  for (string::const_iterator it=pep.begin(); it!=pep.end(); it++) {
     pos=isoAlphabet.find(*it);
     if (pos!=string::npos) numAA[pos]++;
   }
@@ -115,7 +114,7 @@ double DescriptionOfCorrect::isoElectricPoint(const string& pep) {
 
   while((pH-pHlow > epsilon) || (pHhigh-pH > epsilon)) {
     double NQ = 1/(1+pow(10,(pH-pKN))) - 1/(1+pow(10,(pKC-pH)));
-    for(size_t ix=0; ix<numAA.size();ix++) {
+    for(size_t ix=0; ix<numAA.size(); ix++) {
       if (numAA[ix]==0)
         continue;
       if (pKiso[ix]>0) {
@@ -125,14 +124,14 @@ double DescriptionOfCorrect::isoElectricPoint(const string& pep) {
       }
     }
     if(NQ<0) {  //Bisection method
-        pHhigh = pH;
-        pH -= ((pH-pHlow)/2);
+      pHhigh = pH;
+      pH -= ((pH-pHlow)/2);
     } else {
-        pHlow = pH;
-        pH += ((pHhigh-pH)/2);
+      pHlow = pH;
+      pH += ((pHhigh-pH)/2);
     }
- }
- return pH;
+  }
+  return pH;
 }
 /*
 <<<<<<< HEAD:src/DescriptionOfCorrect.cpp

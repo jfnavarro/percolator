@@ -20,14 +20,15 @@
 #include<string>
 using namespace std;
 
-class MassHandler
-{
+class MassHandler {
 public:
-	MassHandler();
-	virtual ~MassHandler();
-	static void setMonoisotopicMass(bool mi) {monoisotopic=mi;}
-	static double massDiff(double observedMass, double calculatedMass, unsigned int charge, const string& peptide);
-	static bool monoisotopic;
+  MassHandler();
+  virtual ~MassHandler();
+  static void setMonoisotopicMass(bool mi) {
+    monoisotopic=mi;
+  }
+  static double massDiff(double observedMass, double calculatedMass, unsigned int charge, const string& peptide);
+  static bool monoisotopic;
 };
 
 #endif /*MASSHANDLER_H_*/

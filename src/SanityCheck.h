@@ -20,8 +20,7 @@
 class Scores;
 class Normalizer;
 
-class SanityCheck
-{
+class SanityCheck {
 public:
   SanityCheck();
   virtual ~SanityCheck();
@@ -31,9 +30,15 @@ public:
   virtual bool validateDirection(vector<vector<double> >& w);
   void resetDirection(vector<vector<double> >& w);
 
-  static void setInitWeightFN(string fn) {initWeightFN=fn;}
-  static void setInitDefaultDir(int dir) {initDefaultDir=dir;}
-  static void setOverrule(bool orl) {overRule=orl;}
+  static void setInitWeightFN(string fn) {
+    initWeightFN=fn;
+  }
+  static void setInitDefaultDir(int dir) {
+    initDefaultDir=dir;
+  }
+  static void setOverrule(bool orl) {
+    overRule=orl;
+  }
 protected:
   virtual void getDefaultDirection(vector<vector<double> >& w);
   int initPositives;
@@ -41,8 +46,8 @@ protected:
   static bool overRule;
   static string initWeightFN;
   static int initDefaultDir; // Default Direction, 0=do not use,
-                             // positive integer = feature number,
-                             // negative integer = lower score better
+  // positive integer = feature number,
+  // negative integer = lower score better
   vector<Scores> *pTestset, *pTrainset;
 };
 

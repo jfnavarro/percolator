@@ -1,10 +1,10 @@
 # The name of the project is "LUMINATOR". CMakeLists files in this project can
 # refer to the root source directory of the project as ${LUMINATOR_SOURCE_DIR} and
 # to the root binary directory of the project as ${LUMINATOR_BINARY_DIR}.
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.6.4)
 project(LUMINATOR)
 
-# Specifiying directory where built executables will be placed
+# Specifying directory where built executables will be placed
 set(EXECUTABLE_OUTPUT_PATH "${LUMINATOR_SOURCE_DIR}/bin")
 
 # Going down to sources directory
@@ -13,7 +13,7 @@ add_subdirectory(src)
 # Packaging general options
 set(PACKAGE_NICKNAME "perluqval")
 set(CPACK_SET_DESTDIR TRUE) # Enabling absolute paths for CPack (important!)
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Luminator and Qvalumity software package for protein classification using unique algorithms.")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Luminator, Qvalumity and Elude software package for protein classification using unique algorithms.")
 set(CPACK_GENERATOR "TGZ;DEB") # Distribution packaging formats ("make package"); RPM packaging can also be included later
 set(CPACK_SOURCE_GENERATOR "TGZ") # This file format is used to package source code ("make package_source")
 set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_CURRENT_BINARY_DIR};${CMAKE_PROJECT_NAME};ALL;/")

@@ -9,7 +9,7 @@
 using namespace std;
 
 class MSObject {
- public:
+public:
   //Constructors & Destructors
   MSObject();
   MSObject(const MSObject&);
@@ -31,11 +31,11 @@ class MSObject {
   void setHeader(const MSHeader& h);
   int size();
 
- protected:
- private:
+protected:
+private:
   vector<Spectrum> *vSpectrum;
   string fileName;
-	MSHeader header;
+  MSHeader header;
   MSSpectrumType fileType;
 
 };

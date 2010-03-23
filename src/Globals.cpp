@@ -19,26 +19,22 @@
 
 Globals * Globals::glob = 0;
 
-Globals::~Globals()
-{
+Globals::~Globals() {
 }
 
-Globals::Globals()
-{
+Globals::Globals() {
 //    assert(!glob);
-    glob=this;
-    verbose =2;
+  glob=this;
+  verbose =2;
 }
 
-Globals * Globals::getInstance()
-{
-    if (!glob) new Globals();
-    return glob;
+Globals * Globals::getInstance() {
+  if (!glob) new Globals();
+  return glob;
 }
 
-void Globals::clean()
-{
-    if (glob)
-      delete glob;
-    glob = 0;
+void Globals::clean() {
+  if (glob)
+    delete glob;
+  glob = 0;
 }

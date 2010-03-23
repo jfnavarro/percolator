@@ -21,14 +21,18 @@
 using namespace std;
 #include "BaseSpline.h"
 
-class LogisticRegression : public BaseSpline
-{
+class LogisticRegression : public BaseSpline {
 public:
   LogisticRegression();
   virtual ~LogisticRegression();
-  void predict(const vector<double>& x, vector<double>& predict) { return BaseSpline::predict(x,predict);}
+  void predict(const vector<double>& x, vector<double>& predict) {
+    return BaseSpline::predict(x,predict);
+  }
   void setData(const vector<double>& xx, const vector<unsigned int>& yy, const vector<unsigned int>& mm) {
-  	  BaseSpline::setData(xx);y=yy; m=mm;}
+    BaseSpline::setData(xx);
+    y=yy;
+    m=mm;
+  }
 protected:
   virtual void calcPZW();
   virtual void initg();

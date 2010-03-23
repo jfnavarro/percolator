@@ -31,8 +31,12 @@ using namespace std;
 class SplinePredictor {
   BaseSpline *bs;
 public:
-  SplinePredictor(BaseSpline *b) {bs=b;}
-  double operator() (double x) {return bs->predict(x);}
+  SplinePredictor(BaseSpline *b) {
+    bs=b;
+  }
+  double operator() (double x) {
+    return bs->predict(x);
+  }
 };
 
 double BaseSpline::convergeEpsilon = 1e-4;
@@ -105,7 +109,8 @@ void BaseSpline::iterativeReweightedLeastSquares() {
       // Return with the alpha used when setting g
       break;
     }
-    cv=res.second;alpha=res.first;
+    cv=res.second;
+    alpha=res.first;
   } while (true);
   if(VERB>2) cerr << "Alpha selected to be " << alpha  << endl;
   g=gnew;
@@ -114,14 +119,18 @@ void BaseSpline::iterativeReweightedLeastSquares() {
 pair<double,double> BaseSpline::alphaLinearSearch(double min_p,double max_p, double p1, double p2, double cv1, double cv2) {
   double oldCV;
   if (cv1>cv2) {
-	min_p = p1;
-	p1=p2; oldCV=cv1; cv1=cv2;
+    min_p = p1;
+    p1=p2;
+    oldCV=cv1;
+    cv1=cv2;
     p2 = min_p + tao*(max_p-min_p);
     cv2 = crossValidation(-log(p2));
     if(VERB>3) cerr << "New point with alpha=" << -log(p2) << ", giving cv=" << cv2 << " taken in consideration" << endl;
   } else {
-	max_p = p2;
-	p2=p1; oldCV=cv2; cv2=cv1;
+    max_p = p2;
+    p2=p1;
+    oldCV=cv2;
+    cv2=cv1;
     p1 = min_p + (1-tao)*(max_p - min_p);
     cv1 = crossValidation(-log(p1));
     if(VERB>3) cerr << "New point with alpha=" << -log(p1) << ", giving cv=" << cv1 << " taken in consideration" << endl;
@@ -134,7 +143,7 @@ pair<double,double> BaseSpline::alphaLinearSearch(double min_p,double max_p, dou
 void BaseSpline::initiateQR() {
   int n = x.size();
   dx.resize(n-1,0.0);
-  for (int ix=0;ix<n-1;ix++) {
+  for (int ix=0; ix<n-1; ix++) {
     dx[ix]=x[ix+1]-x[ix];
     assert(dx[ix]>0);
   }
@@ -145,7 +154,7 @@ void BaseSpline::initiateQR() {
   Q[0].push_back(0,1/dx[0]);
   Q[1].push_back(0,-1/dx[0]-1/dx[1]);
   Q[1].push_back(1,1/dx[1]);
-  for (int j=2;j<n-2;j++) {
+  for (int j=2; j<n-2; j++) {
     Q[j].push_back(j-2,1/dx[j-1]);
     Q[j].push_back(j-1,-1/dx[j-1]-1/dx[j]);
     Q[j].push_back(j,1/dx[j]);
@@ -154,7 +163,7 @@ void BaseSpline::initiateQR() {
   Q[n-2].push_back(n-3,-1/dx[n-3]-1/dx[n-2]);
   Q[n-1].push_back(n-3,1/dx[n-2]);
   //Fill R
-  for (int i=0;i<n-3;i++) {
+  for (int i=0; i<n-3; i++) {
     R[i].push_back(i,(dx[i]+dx[i+1])/3);
     R[i].push_back(i+1,dx[i+1]/6);
     R[i+1].push_back(i,dx[i+1]/6);
@@ -172,12 +181,16 @@ double BaseSpline::crossValidation(double alpha) {
   PackedMatrix B = R + alpha*Qt*diagonalPacked(Vec(n+2,1.0)/w)*Q;
   // Get the diagonals from K
   // ka[i]=B[i,i+a]=B[i+a,i]
-  for (int row=0;row<n;++row) {
-    for(int rowPos=B[row].packedSize();rowPos--;) {
+  for (int row=0; row<n; ++row) {
+    for(int rowPos=B[row].packedSize(); rowPos--;) {
       int col = B[row].index(rowPos);
-      if (col==row) { k0[row]= B[row][rowPos]; }
-      else if (col+1==row) {k1[row]=B[row][rowPos];}
-      else if (col+2==row) {k2[row]=B[row][rowPos];}
+      if (col==row) {
+        k0[row]= B[row][rowPos];
+      } else if (col+1==row) {
+        k1[row]=B[row][rowPos];
+      } else if (col+2==row) {
+        k2[row]=B[row][rowPos];
+      }
     }
   }
 
@@ -190,7 +203,7 @@ double BaseSpline::crossValidation(double alpha) {
   l1[0]=k1[0]/d[0];
   d[1]=k0[1]-l1[0]*l1[0]*d[0];
 
-  for (int row=2;row<n;++row) {
+  for (int row=2; row<n; ++row) {
     l2[row-2]=k2[row-2]/d[row-2];
     l1[row-1]=(k1[row-1]-l1[row-2]*l2[row-2]*d[row-2])/d[row-1];
     d[row]=k0[row] - l1[row-1]*l1[row-1]*d[row-1] - l2[row-2]*l2[row-2]*d[row-2];
@@ -199,10 +212,12 @@ double BaseSpline::crossValidation(double alpha) {
   // ba[i]=B^{-1}[i+a,i]=B^{-1}[i,i+a]
 //  Vec b0(n),b1(n),b2(n);
   vector<double> b0(n),b1(n),b2(n);
-  for (int row=n;--row;) {
-    if (row==n-1) { b0[n-1] = 1/d[n-1]; }
-    else if (row==n-2) { b0[n-2] = 1/d[n-2]-l1[n-2]*b1[n-2]; }
-    else {
+  for (int row=n; --row;) {
+    if (row==n-1) {
+      b0[n-1] = 1/d[n-1];
+    } else if (row==n-2) {
+      b0[n-2] = 1/d[n-2]-l1[n-2]*b1[n-2];
+    } else {
       b0[row] = 1/d[row] - l1[row]*b1[row] - l2[row]*b2[row];
     }
     if (row==n-1) {
@@ -218,10 +233,10 @@ double BaseSpline::crossValidation(double alpha) {
   // (expanding q according to p12)
 //  Vec a(n+2),c(n+1);
   vector<double> a(n),c(n-1);
-  for (int ix=0;ix<n-1;ix++)
+  for (int ix=0; ix<n-1; ix++)
     c[ix] = 1/dx[ix];
 
-  for (int ix=0;ix<n;ix++) {
+  for (int ix=0; ix<n; ix++) {
     if (ix>0) {
       a[ix]+= b0[ix-1]*c[ix-1]*c[ix-1];
       if (ix<n-1) {
@@ -237,7 +252,7 @@ double BaseSpline::crossValidation(double alpha) {
 
   // Calculating weighted cross validation as described in p
   double cv = 0.0;
-  for (int ix=0;ix<n;ix++) {
+  for (int ix=0; ix<n; ix++) {
     double f =(z[ix]-gnew[ix])*w[ix]/(alpha*a[ix]);
 //    double f =(z[ix]-gnew[ix])/(alpha*alpha*a[ix]*a[ix]);
     cv += f*f*w[ix];

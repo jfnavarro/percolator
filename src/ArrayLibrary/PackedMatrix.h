@@ -70,8 +70,8 @@ template<typename T> void solveEquation(PackedMatrix& mat,Array<T>& res) {
     // find the non-null elements in this column (below row "col")
     nonEmpty.clear();
     int pivotPos(-1);
-    for(row=col;row<mat.size();row++) {
-      for(rowPos=mat[row].packedSize();rowPos--;) {
+    for(row=col; row<mat.size(); row++) {
+      for(rowPos=mat[row].packedSize(); rowPos--;) {
         if (mat[row].index(rowPos)==col) {
           nonEmpty.push_back(row,mat[row][rowPos]);
           if (row==col)
@@ -82,7 +82,7 @@ template<typename T> void solveEquation(PackedMatrix& mat,Array<T>& res) {
     //find most significant row
     double maxVal(0.0);
     int maxRow(-1),maxRowPos(-1);
-    for (rowPos=nonEmpty.packedSize();rowPos--;) {
+    for (rowPos=nonEmpty.packedSize(); rowPos--;) {
       double val = nonEmpty[rowPos];
       assert(isfinite(val));
       if (fabs(val)>fabs(maxVal)) {
@@ -104,7 +104,7 @@ template<typename T> void solveEquation(PackedMatrix& mat,Array<T>& res) {
       res[col] /= maxVal;
     }
     // subtract the row from other rows
-    for (rowPos=nonEmpty.packedSize();rowPos--;) {
+    for (rowPos=nonEmpty.packedSize(); rowPos--;) {
       row = nonEmpty.index(rowPos);
       if (row == col) continue;
       // If the pivotRow was empty (prior to swap) at col=row do not process this row
@@ -118,15 +118,15 @@ template<typename T> void solveEquation(PackedMatrix& mat,Array<T>& res) {
 
   for (col=mat.size(); col--;) {
     nonEmpty.clear();
-    for(row=0;row<col;row++) {
-      for(rowPos=mat[row].packedSize();rowPos--;) {
+    for(row=0; row<col; row++) {
+      for(rowPos=mat[row].packedSize(); rowPos--;) {
         if (mat[row].index(rowPos)==col) {
           nonEmpty.push_back(row,mat[row][rowPos]);
         }
       }
     }
     // subtract the row from other rows
-    for (rowPos=nonEmpty.packedSize();rowPos--;) {
+    for (rowPos=nonEmpty.packedSize(); rowPos--;) {
       row = nonEmpty.index(rowPos);
       double val = nonEmpty[rowPos];
       mat[row] -= val*mat[col];

@@ -28,44 +28,40 @@ using namespace std;
 int Normalizer::subclass_type = STDV;
 Normalizer* Normalizer::theNormalizer = NULL;
 
-Normalizer::Normalizer()
-{
+Normalizer::Normalizer() {
 }
 
-Normalizer::~Normalizer()
-{
+Normalizer::~Normalizer() {
 }
 
 void Normalizer::normalizeSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV) {
   double * features;
   vector<double *>::iterator it=featuresV.begin();
-  for (;it!=featuresV.end();++it) {
+  for (; it!=featuresV.end(); ++it) {
     features = *it;
     normalize(features,features,0,numFeatures);
   }
   vector<double *>::iterator rtit=rtFeaturesV.begin();
-  for (;rtit!=rtFeaturesV.end();++rtit) {
+  for (; rtit!=rtFeaturesV.end(); ++rtit) {
     features = *rtit;
     normalize(features,features,numFeatures,numRetentionFeatures);
   }
 }
 
-void Normalizer::normalize(const double *in,double* out, size_t offset, size_t numFeatures){
-  for (unsigned int ix=0;ix<numFeatures;++ix) {
+void Normalizer::normalize(const double *in,double* out, size_t offset, size_t numFeatures) {
+  for (unsigned int ix=0; ix<numFeatures; ++ix) {
     out[ix]=(in[ix]-sub[offset+ix])/div[offset+ix];
   }
 }
 
-void Normalizer::unNormalizeSet(vector<double *> & rtFeaturesV)
-{
-	double *features;
+void Normalizer::unNormalizeSet(vector<double *> & rtFeaturesV) {
+  double *features;
 
-	for(int i = 0; i < rtFeaturesV.size(); ++i)
-	{
-		features= rtFeaturesV[i];
-		for(int j = 0; j < numRetentionFeatures; ++j)
-			features[j] = (features[j] * div[j]) + sub[j];
-	}
+  for(int i = 0; i < rtFeaturesV.size(); ++i) {
+    features= rtFeaturesV[i];
+    for(int j = 0; j < numRetentionFeatures; ++j)
+      features[j] = (features[j] * div[j]) + sub[j];
+  }
 }
 // normalize a set of PSMs
 /*
@@ -84,16 +80,16 @@ void Normalizer::normalizeSet(vector<PSMDescription> & psms)
 }
 */
 Normalizer * Normalizer::getNormalizer() {
-    if (theNormalizer==NULL) {
-	  if (subclass_type == UNI)
-	    theNormalizer = new UniNormalizer();
-      else
-	    theNormalizer = new StdvNormalizer();
-    }
-    return theNormalizer;
+  if (theNormalizer==NULL) {
+    if (subclass_type == UNI)
+      theNormalizer = new UniNormalizer();
+    else
+      theNormalizer = new StdvNormalizer();
+  }
+  return theNormalizer;
 }
 
-void Normalizer::setType(int type){
-	assert(type==UNI || type==STDV);
-	subclass_type = type;
+void Normalizer::setType(int type) {
+  assert(type==UNI || type==STDV);
+  subclass_type = type;
 }

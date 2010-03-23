@@ -21,32 +21,54 @@
 using namespace std;
 #include "EludeModel.h"
 
-class DescriptionOfCorrect
-{
+class DescriptionOfCorrect {
 public:
   DescriptionOfCorrect();
   virtual ~DescriptionOfCorrect();
-  double getAvgDeltaMass() {return avgDM;}
-  double getAvgPI() {return avgPI;}
+  double getAvgDeltaMass() {
+    return avgDM;
+  }
+  double getAvgPI() {
+    return avgPI;
+  }
   static void calcRegressionFeature(PSMDescription &psm);
   static double isoElectricPoint(const string& peptide);
-  static void setKlammer(bool on) {RTModel::setDoKlammer(on);}
-  static void setDocType(const unsigned int dt) {docFeatures=dt;}
-  void clear() {psms.clear();}
-  void registerCorrect(PSMDescription& psm) {psms.push_back(psm);}
+  static void setKlammer(bool on) {
+    RTModel::setDoKlammer(on);
+  }
+  static void setDocType(const unsigned int dt) {
+    docFeatures=dt;
+  }
+  void clear() {
+    psms.clear();
+  }
+  void registerCorrect(PSMDescription& psm) {
+    psms.push_back(psm);
+  }
   void trainCorrect();
   void setFeatures(PSMDescription& psm);
   //static size_t totalNumRTFeatures() {return (doKlammer?64:minimumNumRTFeatures() + 20);}
   //static size_t minimumNumRTFeatures() {return 3*10+1+3;}
   void print_10features();
-  svm_model* getModel() {return rtModel.getModel();}
-  size_t getRTFeat() { return rtModel.getRTFeat();}
-  static size_t numDOCFeatures() {return 4;}
+  svm_model* getModel() {
+    return rtModel.getModel();
+  }
+  size_t getRTFeat() {
+    return rtModel.getRTFeat();
+  }
+  static size_t numDOCFeatures() {
+    return 4;
+  }
   void copyDOCparameters(DescriptionOfCorrect& other) {
     //avgPI = other.avgPI; avgDM = other.avgDM; rtW = other.rtW; numRTFeat = other.numRTFeat;
-    avgPI = other.avgPI; avgDM = other.avgDM; rtModel.copyModel(other.getModel()); rtModel.setNumRtFeat(other.getRTFeat());
+    avgPI = other.avgPI;
+    avgDM = other.avgDM;
+    rtModel.copyModel(other.getModel());
+    rtModel.setNumRtFeat(other.getRTFeat());
   }
-  double estimateRT(double * features) {return rtModel.estimateRT(features);}
+  double estimateRT(double * features) {
+    return rtModel.estimateRT(features);
+  }
 
 protected:
   double avgPI,avgDM;

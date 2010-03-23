@@ -17,16 +17,15 @@
 #ifndef STDVNORMALIZER_H_
 #define STDVNORMALIZER_H_
 
-class StdvNormalizer : public Normalizer // virtual Normalizer
-{
+class StdvNormalizer : public Normalizer { // virtual Normalizer
 public:
-	StdvNormalizer();
-	virtual ~StdvNormalizer();
-    virtual void setSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV, size_t numFeatures, size_t numRetentionFeatures);
-    // to be implemented
+  StdvNormalizer();
+  virtual ~StdvNormalizer();
+  virtual void setSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV, size_t numFeatures, size_t numRetentionFeatures);
+  // to be implemented
 //    virtual void setPsmSet(vector<PSMDescription> & psms, size_t noFeat);
-    void unnormalizeweight(const vector<double>& in,vector<double>& out);
-    void normalizeweight(const vector<double>& in,vector<double>& out);
+  void unnormalizeweight(const vector<double>& in,vector<double>& out);
+  void normalizeweight(const vector<double>& in,vector<double>& out);
 };
 
 #endif /*STDVNORMALIZER_H_*/

@@ -11,8 +11,8 @@
  conditions:
 
  The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software. 
- 
+ included in all copies or substantial portions of the Software.
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -21,9 +21,9 @@
  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
- 
+
  $Id: PackedVec.h,v 1.3 2009/01/09 14:41:00 lukall Exp $
- 
+
  *******************************************************************************/
 
 #include "ArrayLibrary.h"
@@ -37,37 +37,30 @@
 using namespace std;
 
 
-class PackedVec
-{
+class PackedVec {
 public:
-  void push_back(int index, double d)
-  {
+  void push_back(int index, double d) {
     nonNull.push_back(index);
     data.push_back(d);
   }
 
-  const double & operator[] (int i) const
-  {
+  const double & operator[] (int i) const {
     return data[i];
   }
 
-  double & operator[] (int i)
-  {
+  double & operator[] (int i) {
     return data[i];
   }
-  
-  int index(int i) const
-  {
+
+  int index(int i) const {
     return nonNull[i];
   }
-  
-  int packedSize() const
-  {
+
+  int packedSize() const {
     return data.size();
   }
 
-  void clear()
-  {
+  void clear() {
     data.clear();
     nonNull.clear();
   }

@@ -29,12 +29,10 @@ using namespace std;
 
 const double LogisticRegression::gRange=35.0;
 
-LogisticRegression::LogisticRegression()
-{
+LogisticRegression::LogisticRegression() {
 }
 
-LogisticRegression::~LogisticRegression()
-{
+LogisticRegression::~LogisticRegression() {
 }
 
 void invlogit(double & out,double in) {
@@ -52,22 +50,22 @@ double logit(double p) {
 }
 
 void LogisticRegression::limitg() {
-  for (int ix=gnew.size();ix--;) {
-	gnew[ix] = min(gRange,max(-gRange,gnew[ix]));
+  for (int ix=gnew.size(); ix--;) {
+    gnew[ix] = min(gRange,max(-gRange,gnew[ix]));
     assert(isfinite(gnew[ix]));
   }
 }
 
 void LogisticRegression::limitgamma() {
-  for (int ix=gamma.size();ix--;) {
-	gamma[ix] = min(gRange,max(-gRange,gamma[ix]));
+  for (int ix=gamma.size(); ix--;) {
+    gamma[ix] = min(gRange,max(-gRange,gamma[ix]));
     assert(isfinite(gamma[ix]));
   }
 }
 
 
 void LogisticRegression::calcPZW() {
-  for (int ix=z.size();ix--;) {
+  for (int ix=z.size(); ix--;) {
     assert(isfinite(g[ix]));
     double e = exp(g[ix]);
     assert(isfinite(e));
@@ -84,7 +82,7 @@ void LogisticRegression::initg() {
   BaseSpline::initg();
   int n=x.size();
   p.resize(n);
-  for (int ix=g.size();ix--;) {
+  for (int ix=g.size(); ix--;) {
     double p = (y[ix]+0.05)/(m[ix]+0.1);
     gnew[ix] = log(p/(1-p));
     assert(isfinite(p));
@@ -98,7 +96,7 @@ void LogisticRegression::initg() {
 
   copy(x.begin(),x.end(),xvalIt);
 
-  for(size_t yix=0;yix<y.size();++yix) {
+  for(size_t yix=0; yix<y.size(); ++yix) {
     drFile << y[yix]/(double) m[yix] << endl;
   }
   drFile.close();

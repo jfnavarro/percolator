@@ -31,13 +31,13 @@ typedef off_t f_off;
 #define fseek(h,p,o) fseeko(h,p,o)
 #define ftell(h) ftello(h)
 
-#endif /* end _MSC_VER */ 
+#endif /* end _MSC_VER */
 
 
 using namespace std;
 
 class MSReader {
- public:
+public:
   //Constructors & Destructors
   MSReader();
   ~MSReader();
@@ -47,13 +47,13 @@ class MSReader {
   void appendFile(char* c, bool text, MSObject& m);
   void appendFile(char* c, Spectrum& s);
   void appendFile(char* c, MSObject& m);
-  
+
   MSFileFormat checkFileFormat(char *fn);
 
   MSHeader& getHeader();
   //Spectrum readBinaryFile(char* c, Spectrum& s, int scNum=0);
   //Spectrum readMSFile(char* c,int scNum=0);
-	
+
   MSSpectrumType getFileType();
   int getPercent();
   int getLastScan();
@@ -68,7 +68,7 @@ class MSReader {
   bool readFile(char* c, bool text, Spectrum& s, int scNum=0);
   bool readFile(char* c, MSFileFormat f, Spectrum& s, int scNum=0);
   bool readFile(char* c, Spectrum& s, int scNum=0);
-  
+
   void setFilter(vector<MSSpectrumType>& m);
   void setFilter(const MSSpectrumType& m);
 
@@ -76,11 +76,11 @@ class MSReader {
   void setCompression(bool b);
 
   //for Sqlite
-  void createIndex(); 
+  void createIndex();
 
- protected:
+protected:
 
- private:
+private:
   //Data Members
   FILE *fileIn;
   MSHeader header;
@@ -117,9 +117,9 @@ class MSReader {
   void writeCompressSpec(FILE* fileOut, Spectrum& s);
   void writeTextSpec(FILE* fileOut, Spectrum& s);
   void writeSpecHeader(FILE* fileOut, bool text, Spectrum& s);
-  
+
   //support for sqlite
-  #ifndef _NOSQLITE
+#ifndef _NOSQLITE
   bool readSqlite(char* c, Spectrum& s, int scNum);
   void getUncompressedPeaks(Spectrum& s, int& numPeaks, int& mzLen, Byte* comprM, int& intensityLen, Byte* comprI);
   int curIndex;  //remember where we are
@@ -132,7 +132,7 @@ class MSReader {
   void writeSqlite(char* c, MSObject& m, char* sha1Report);
   void readChargeTable(int scanID, Spectrum& s);
   vector<int> estimateCharge(Spectrum& s);
-  #endif 
+#endif
 
 };
 

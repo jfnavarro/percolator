@@ -37,24 +37,24 @@ static SetHandler::Iterator * decoy3 = NULL;
 
 
 Caller * getCaller() {
-    if (pCaller==NULL) {
-      cerr << "Object pCaller not properly assigned" << endl;
-      exit(-1);
-    }
-    return pCaller;
+  if (pCaller==NULL) {
+    cerr << "Object pCaller not properly assigned" << endl;
+    exit(-1);
+  }
+  return pCaller;
 }
 
 
 /** Call that initiates percolator */
 void pcInitiate(NSet sets, unsigned int numFeat, unsigned int numSpectra, char ** featureNames, double pi0) {
-    pCaller=new Caller();
-    nset=sets;
-    numFeatures = numFeat;
-    pCaller->filelessSetup(numFeatures, numSpectra, featureNames, pi0);
-    normal = new SetHandler::Iterator(pCaller->getSetHandler(Caller::NORMAL));
-    decoy1 = new SetHandler::Iterator(pCaller->getSetHandler(Caller::SHUFFLED));
-    if (nset>2)
-      cerr << "This version of percolator only suport 1 decoy set. Pecolator was called with nset=" << nset << endl;
+  pCaller=new Caller();
+  nset=sets;
+  numFeatures = numFeat;
+  pCaller->filelessSetup(numFeatures, numSpectra, featureNames, pi0);
+  normal = new SetHandler::Iterator(pCaller->getSetHandler(Caller::NORMAL));
+  decoy1 = new SetHandler::Iterator(pCaller->getSetHandler(Caller::SHUFFLED));
+  if (nset>2)
+    cerr << "This version of percolator only suport 1 decoy set. Pecolator was called with nset=" << nset << endl;
 }
 
 /** Call that sets verbosity level
@@ -71,29 +71,29 @@ void pcSetVerbosity(int verbosity) {
 /** Register a PSM */
 void pcRegisterPSM(SetType set, char * identifier, double * features) {
   if ((int)set>(int)nset) {
-     cerr << "Tried to access undefined set" << endl;
-     exit(-1);
+    cerr << "Tried to access undefined set" << endl;
+    exit(-1);
   }
   double * vec = NULL;
   switch(set) {
-    case TARGET:
-      vec = normal->getNext()->features;
-      break;
-    case DECOY1:
-      vec = decoy1->getNext()->features;
-      break;
-    case DECOY2:
-      vec = decoy2->getNext()->features;
-      break;
-    case DECOY3:
-      vec = decoy3->getNext()->features;
-      break;
+  case TARGET:
+    vec = normal->getNext()->features;
+    break;
+  case DECOY1:
+    vec = decoy1->getNext()->features;
+    break;
+  case DECOY2:
+    vec = decoy2->getNext()->features;
+    break;
+  case DECOY3:
+    vec = decoy3->getNext()->features;
+    break;
   }
   if (vec==NULL) {
-     cerr << "Pointer out of bound" << endl;
-     exit(-1);
+    cerr << "Pointer out of bound" << endl;
+    exit(-1);
   }
-  for (unsigned int ix=0;ix<numFeatures;ix++) {
+  for (unsigned int ix=0; ix<numFeatures; ix++) {
     vec[ix] = features[ix];
   }
 }
@@ -122,14 +122,26 @@ void pcGetScores(double *scoreArr,double *qArr) {
 
 /** Function that should be called after processing finished */
 void pcCleanUp() {
-    if (pCaller) {
-      delete pCaller;
-      pCaller=NULL;
-    }
-    if (normal) { delete normal; normal = NULL; }
-    if (decoy1) { delete decoy1; decoy1 = NULL; }
-    if (decoy2) { delete decoy2; decoy2 = NULL; }
-    if (decoy3) { delete decoy3; decoy3 = NULL; }
+  if (pCaller) {
+    delete pCaller;
+    pCaller=NULL;
+  }
+  if (normal) {
+    delete normal;
+    normal = NULL;
+  }
+  if (decoy1) {
+    delete decoy1;
+    decoy1 = NULL;
+  }
+  if (decoy2) {
+    delete decoy2;
+    decoy2 = NULL;
+  }
+  if (decoy3) {
+    delete decoy3;
+    decoy3 = NULL;
+  }
 
-    Globals::clean();
+  Globals::clean();
 }

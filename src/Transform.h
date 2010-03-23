@@ -19,11 +19,14 @@
 
 #include <math.h>
 
-class Transform
-{
+class Transform {
 public:
-  Transform(double deltL=0.0,double deltH=0.0,bool dLt=false,bool dL=false) : deltaLow(deltL),deltaHigh(deltH),doLogit(dLt),doLog(dL) {;}
-  ~Transform() {;}
+  Transform(double deltL=0.0,double deltH=0.0,bool dLt=false,bool dL=false) : deltaLow(deltL),deltaHigh(deltH),doLogit(dLt),doLog(dL) {
+    ;
+  }
+  ~Transform() {
+    ;
+  }
   double operator() (double xx) {
     if ((!doLogit) && (!doLog)) return xx;
     if ((deltaLow>.0) || (deltaHigh>.0)) {

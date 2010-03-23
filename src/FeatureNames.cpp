@@ -22,8 +22,7 @@
 size_t FeatureNames::numFeatures = 0;
 
 
-FeatureNames::FeatureNames()
-{
+FeatureNames::FeatureNames() {
   minCharge = 100;
   maxCharge = -1;
   chargeFeatNum = -1;
@@ -38,8 +37,7 @@ FeatureNames::FeatureNames()
 
 }
 
-FeatureNames::~FeatureNames()
-{
+FeatureNames::~FeatureNames() {
 }
 
 string FeatureNames::getFeatureNames(bool skipDOC) {
@@ -78,8 +76,7 @@ void FeatureNames::setSQTFeatures(
   bool doPNGaseF,
   const string& aaAlphabet,
   bool calcQuadratic,
-  bool calcDOC)
-{
+  bool calcDOC) {
   if (!featureNames.empty())
     return;
   featureNames.push_back("lnrSp");
@@ -91,7 +88,8 @@ void FeatureNames::setSQTFeatures(
   featureNames.push_back("Mass");
   featureNames.push_back("PepLen");
   chargeFeatNum = featureNames.size();
-  minCharge = minC; maxCharge = maxC;
+  minCharge = minC;
+  maxCharge = maxC;
   for(int charge=minCharge; charge <= maxCharge; ++charge) {
     ostringstream cname;
     cname << "Charge" << charge;
@@ -117,13 +115,13 @@ void FeatureNames::setSQTFeatures(
   }
   if (!aaAlphabet.empty()) {
     aaFeatNum = featureNames.size();
-    for (string::const_iterator it=aaAlphabet.begin();it!=aaAlphabet.end();it++)
+    for (string::const_iterator it=aaAlphabet.begin(); it!=aaAlphabet.end(); it++)
       featureNames.push_back(*it + "-Freq");
   }
   if(calcQuadratic) {
     quadraticFeatNum = featureNames.size();
-    for(int f1=1;f1<quadraticFeatNum;++f1) {
-      for(int f2=0;f2<f1;++f2) {
+    for(int f1=1; f1<quadraticFeatNum; ++f1) {
+      for(int f2=0; f2<f1; ++f2) {
         ostringstream feat;
         feat << "f" << f1+1 << "*" << "f" << f2+1;
         featureNames.push_back(feat.str());

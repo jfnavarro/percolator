@@ -19,31 +19,38 @@
 #define GLOBALS_H_
 
 #ifdef WIN32
-  #define C_DARRAY(name,nelem) double *name = (double *) _malloca((nelem) * sizeof(double));
-  #define D_DARRAY(name) _freea(name);
-  #include <float.h>
-  #define isfinite _finite
+#define C_DARRAY(name,nelem) double *name = (double *) _malloca((nelem) * sizeof(double));
+#define D_DARRAY(name) _freea(name);
+#include <float.h>
+#define isfinite _finite
 #else
-  #define C_DARRAY(name,nelem) double name[nelem];
-  #define D_DARRAY(name)
+#define C_DARRAY(name,nelem) double name[nelem];
+#define D_DARRAY(name)
 #endif
 
 #define VERB (Globals::getInstance()->getVerbose())
 
-class Globals
-{
+class Globals {
 public:
-	virtual ~Globals();
-    static Globals * getInstance();
-    static void clean();
-    int getVerbose() {return verbose;}
-    void setVerbose(int verb) {verbose=verb;}
-    void decVerbose() {verbose--;}
-    void incVerbose() {verbose++;}
+  virtual ~Globals();
+  static Globals * getInstance();
+  static void clean();
+  int getVerbose() {
+    return verbose;
+  }
+  void setVerbose(int verb) {
+    verbose=verb;
+  }
+  void decVerbose() {
+    verbose--;
+  }
+  void incVerbose() {
+    verbose++;
+  }
 private:
-	Globals();
-    int verbose;
-    static Globals * glob;
+  Globals();
+  int verbose;
+  static Globals * glob;
 };
 
 #endif /*GLOBALS_H_*/

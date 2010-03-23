@@ -24,25 +24,44 @@
 using namespace std;
 #include "Enzyme.h"
 
-class PSMDescription
-{
+class PSMDescription {
 public:
   PSMDescription();
   PSMDescription(const string peptide, const double retTime);
-  PSMDescription(double ort, double prt){ retentionTime = ort; predictedTime = prt;}
+  PSMDescription(double ort, double prt) {
+    retentionTime = ort;
+    predictedTime = prt;
+  }
   virtual ~PSMDescription();
-  void clear() {proteinIds.clear();}
-  double * getFeatures() {return features;}
-  double * getRetentionFeatures() {return retentionFeatures;}
+  void clear() {
+    proteinIds.clear();
+  }
+  double * getFeatures() {
+    return features;
+  }
+  double * getRetentionFeatures() {
+    return retentionFeatures;
+  }
   static vector<double *> getRetFeatures(vector<PSMDescription> & psms);
-  string& getPeptide() {return peptide;}
-  string& getFullPeptide() {return getAParent()->peptide;}
-  PSMDescription* getAParent() {if (parentFragment) return parentFragment->getAParent(); else return this;}
-  double getUnnormalizedRetentionTime() { return unnormalize(retentionTime);}
+  string& getPeptide() {
+    return peptide;
+  }
+  string& getFullPeptide() {
+    return getAParent()->peptide;
+  }
+  PSMDescription* getAParent() {
+    if (parentFragment) return parentFragment->getAParent();
+    else return this;
+  }
+  double getUnnormalizedRetentionTime() {
+    return unnormalize(retentionTime);
+  }
   static bool isSubPeptide(string& child,string& parent);
-  bool isNotEnzymatic() {return !(Enzyme::isEnzymatic(peptide[0],peptide[2]) &&
-		                      Enzyme::isEnzymatic(peptide[peptide.size()-3],peptide[peptide.size()-1]) &&
-		                      Enzyme::countEnzymatic(peptide)==0);}
+  bool isNotEnzymatic() {
+    return !(Enzyme::isEnzymatic(peptide[0],peptide[2]) &&
+             Enzyme::isEnzymatic(peptide[peptide.size()-3],peptide[peptide.size()-1]) &&
+             Enzyme::countEnzymatic(peptide)==0);
+  }
   void checkFragmentPeptides(vector<PSMDescription>::reverse_iterator  other,vector<PSMDescription>::reverse_iterator  theEnd);
   static void setRetentionTime(vector<PSMDescription>& psms, map<int,double>& scan2rt);
   static double unnormalize(double normalizedTime);
@@ -52,8 +71,12 @@ public:
   // normalize retention times for a  set of peptides
   static void normalizeRetentionTimes(vector<PSMDescription> & psms);
   friend ostream& operator<<(ostream & out, PSMDescription & psm);
-  double getRetentionTime() {return retentionTime;}
-  double getPredictedRetentionTime() { return predictedTime; };
+  double getRetentionTime() {
+    return retentionTime;
+  }
+  double getPredictedRetentionTime() {
+    return predictedTime;
+  };
 
   static double normDiv,normSub;
 
@@ -68,33 +91,30 @@ public:
   PSMDescription *parentFragment;
 };
 
-inline bool const operator<(PSMDescription const& one, PSMDescription const& other)
-{
-	if (one.peptide == other.peptide)
-		return one.retentionTime<other.retentionTime;
-	return one.peptide < other.peptide;
+inline bool const operator<(PSMDescription const& one, PSMDescription const& other) {
+  if (one.peptide == other.peptide)
+    return one.retentionTime<other.retentionTime;
+  return one.peptide < other.peptide;
 }
 
-inline bool operator==(PSMDescription const& one, PSMDescription const& other)
-{
+inline bool operator==(PSMDescription const& one, PSMDescription const& other) {
 //	return one.peptide == other.peptide;
-	if(one.peptide == other.peptide)
-		return true;
-	else
-		return false;
+  if(one.peptide == other.peptide)
+    return true;
+  else
+    return false;
 }
 
-inline ostream& operator<< (ostream & out, PSMDescription & psm)
-{
-    // Since operator<< is a friend of the Point class, we can access
-    // Point's members directly.
-    out << "Peptide: " << psm.peptide << endl;
-    out << "Retention time, predicted retention time: " << psm.retentionTime << ", " << psm.predictedTime;
-    out << "Retention features: ";
-    for (int i = 0; i < 76; ++i)
-    	out << psm.retentionFeatures[i] << "  ";
-    out << endl;
-    return out;
+inline ostream& operator<< (ostream & out, PSMDescription & psm) {
+  // Since operator<< is a friend of the Point class, we can access
+  // Point's members directly.
+  out << "Peptide: " << psm.peptide << endl;
+  out << "Retention time, predicted retention time: " << psm.retentionTime << ", " << psm.predictedTime;
+  out << "Retention features: ";
+  for (int i = 0; i < 76; ++i)
+    out << psm.retentionFeatures[i] << "  ";
+  out << endl;
+  return out;
 }
 /*
 inline bool operator!=(const PSMDescription& one, const PSMDescription& other){

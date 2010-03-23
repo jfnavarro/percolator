@@ -19,8 +19,7 @@
 
 #include "SanityCheck.h"
 
-class SqtSanityCheck : public SanityCheck
-{
+class SqtSanityCheck : public SanityCheck {
 public:
   SqtSanityCheck();
   virtual ~SqtSanityCheck();

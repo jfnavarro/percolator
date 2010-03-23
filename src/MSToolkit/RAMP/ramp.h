@@ -78,9 +78,9 @@ typedef float RAMPREAL;
 typedef enum { mzInt = 0 , mzRuler, mzOnly, intensityOnly } e_contentType;
 #ifdef HAVE_PWIZ_MZML_LIB
 namespace pwiz {  // forward ref
-	namespace msdata {  // forward ref
-		class RAMPAdapter; // forward ref
-	}
+namespace msdata {  // forward ref
+class RAMPAdapter; // forward ref
+}
 }
 #endif
 
@@ -88,11 +88,11 @@ namespace pwiz {  // forward ref
 // we use this struct instead of FILE* so we can track what kind of files we're parsing
 //
 typedef struct {
-   ramp_filehandle_t fileHandle;
+  ramp_filehandle_t fileHandle;
 #ifdef HAVE_PWIZ_MZML_LIB
-   pwiz::msdata::RAMPAdapter *mzML; // if nonNULL, then we're reading mzML
+  pwiz::msdata::RAMPAdapter *mzML; // if nonNULL, then we're reading mzML
 #endif
-   int bIsMzData; // if not mzML, then is it mzXML or mzData?
+  int bIsMzData; // if not mzML, then is it mzXML or mzData?
 } RAMPFILE;
 
 #ifdef RAMP_NONNATIVE_LONGFILE // use MSFT API for 64 bit file pointers
@@ -126,35 +126,33 @@ typedef off_t ramp_fileoffset_t;
 #define SCANTYPE_LENGTH 32
 
 
-struct ScanHeaderStruct
-{
-   int seqNum; // number in sequence observed file (1-based)
-   int acquisitionNum; // scan number as declared in File (may be gaps)
-   int  msLevel;
-   int  peaksCount;
-   double totIonCurrent;
-   double retentionTime;        /* in seconds */
-   double basePeakMZ;
-   double basePeakIntensity;
-   double collisionEnergy;
-   double ionisationEnergy;
-   double lowMZ;
-   double highMZ;
-   int precursorScanNum; /* only if MS level > 1 */
-   double precursorMZ;  /* only if MS level > 1 */
-   int precursorCharge;  /* only if MS level > 1 */
-   double precursorIntensity;  /* only if MS level > 1 */
-   char scanType[SCANTYPE_LENGTH];
-   char activationMethod[SCANTYPE_LENGTH];
-   int mergedScan;  /* only if MS level > 1 */
-   int mergedResultScanNum; /* scan number of the resultant merged scan */
-   int mergedResultStartScanNum; /* smallest scan number of the scanOrigin for merged scan */
-   int mergedResultEndScanNum; /* largest scan number of the scanOrigin for merged scan */
-   ramp_fileoffset_t filePosition; /* where in the file is this header? */
+struct ScanHeaderStruct {
+  int seqNum; // number in sequence observed file (1-based)
+  int acquisitionNum; // scan number as declared in File (may be gaps)
+  int  msLevel;
+  int  peaksCount;
+  double totIonCurrent;
+  double retentionTime;        /* in seconds */
+  double basePeakMZ;
+  double basePeakIntensity;
+  double collisionEnergy;
+  double ionisationEnergy;
+  double lowMZ;
+  double highMZ;
+  int precursorScanNum; /* only if MS level > 1 */
+  double precursorMZ;  /* only if MS level > 1 */
+  int precursorCharge;  /* only if MS level > 1 */
+  double precursorIntensity;  /* only if MS level > 1 */
+  char scanType[SCANTYPE_LENGTH];
+  char activationMethod[SCANTYPE_LENGTH];
+  int mergedScan;  /* only if MS level > 1 */
+  int mergedResultScanNum; /* scan number of the resultant merged scan */
+  int mergedResultStartScanNum; /* smallest scan number of the scanOrigin for merged scan */
+  int mergedResultEndScanNum; /* largest scan number of the scanOrigin for merged scan */
+  ramp_fileoffset_t filePosition; /* where in the file is this header? */
 };
 
-struct RunHeaderStruct
-{
+struct RunHeaderStruct {
   int scanCount;
   double lowMZ;
   double highMZ;
@@ -164,14 +162,13 @@ struct RunHeaderStruct
   double dEndTime;
 };
 
-typedef struct InstrumentStruct
-{
-   char manufacturer[INSTRUMENT_LENGTH];
-   char model[INSTRUMENT_LENGTH];
-   char ionisation[INSTRUMENT_LENGTH];
-   char analyzer[INSTRUMENT_LENGTH];
-   char detector[INSTRUMENT_LENGTH];
-   //char msType[INSTRUMENT_LENGTH];
+typedef struct InstrumentStruct {
+  char manufacturer[INSTRUMENT_LENGTH];
+  char model[INSTRUMENT_LENGTH];
+  char ionisation[INSTRUMENT_LENGTH];
+  char analyzer[INSTRUMENT_LENGTH];
+  char detector[INSTRUMENT_LENGTH];
+  //char msType[INSTRUMENT_LENGTH];
 } InstrumentStruct;
 
 // file open/close
@@ -184,9 +181,9 @@ void rampCloseFile(RAMPFILE *pFI);
 std::string rampConstructInputFileName(const std::string &basename);
 char *rampConstructInputFileName(char *buf,int buflen,const char *basename);
 char *rampConstructInputPath(char *buf, // put the result here
-							 int inbuflen, // max result length
-							 const char *dir_in, // use this as a directory hint if basename does not contain valid dir info
-							 const char *basename); // we'll try adding various filename extensions to this
+                             int inbuflen, // max result length
+                             const char *dir_in, // use this as a directory hint if basename does not contain valid dir info
+                             const char *basename); // we'll try adding various filename extensions to this
 
 // construct a filename in inbuf from a basename and taking hints from a named
 // spectrum, adding .mzXML or .mzData as exists
@@ -209,27 +206,27 @@ int rampSelfTest(char *filename); // if filename is non-null we'll exercise read
 
 ramp_fileoffset_t getIndexOffset(RAMPFILE *pFI);
 ramp_fileoffset_t *readIndex(RAMPFILE *pFI,
-                ramp_fileoffset_t indexOffset,
-                int *iLastScan);
+                             ramp_fileoffset_t indexOffset,
+                             int *iLastScan);
 void readHeader(RAMPFILE *pFI,
                 ramp_fileoffset_t lScanIndex, // read from this file position
                 struct ScanHeaderStruct *scanHeader);
 int  readMsLevel(RAMPFILE *pFI,
                  ramp_fileoffset_t lScanIndex);
 double readStartMz(RAMPFILE *pFI,
-		   ramp_fileoffset_t lScanIndex);
+                   ramp_fileoffset_t lScanIndex);
 double readEndMz(RAMPFILE *pFI,
-		   ramp_fileoffset_t lScanIndex);
+                 ramp_fileoffset_t lScanIndex);
 int readPeaksCount(RAMPFILE *pFI,
-                 ramp_fileoffset_t lScanIndex);
+                   ramp_fileoffset_t lScanIndex);
 RAMPREAL *readPeaks(RAMPFILE *pFI,
-                 ramp_fileoffset_t lScanIndex);
+                    ramp_fileoffset_t lScanIndex);
 void readRunHeader(RAMPFILE *pFI,
                    ramp_fileoffset_t *pScanIndex,
                    struct RunHeaderStruct *runHeader,
                    int iLastScan);
 void readMSRun(RAMPFILE *pFI,
-                   struct RunHeaderStruct *runHeader);
+               struct RunHeaderStruct *runHeader);
 
 InstrumentStruct* getInstrumentStruct(RAMPFILE *pFI);
 
@@ -239,11 +236,11 @@ enum {
   BIT_ORIGIN_SCANS = 0x0001,
   BIT_AVERAGE_SCANS = 0x0002,
   OPTION_AVERAGE_SCANS = BIT_AVERAGE_SCANS, // return scan including merged resultant scan
-                                            // but exclude 'real' scan via peaksCount=0
+  // but exclude 'real' scan via peaksCount=0
   OPTION_ORIGIN_SCANS = BIT_ORIGIN_SCANS,   // return 'real' scan
-                                            // but exclude merged resultant scan via peaksCount=0
+  // but exclude merged resultant scan via peaksCount=0
   OPTION_ALL_SCANS = BIT_ORIGIN_SCANS | BIT_AVERAGE_SCANS,
-                                            // return 'real' scan + merged resultant scan
+  // return 'real' scan + merged resultant scan
   DEFAULT_OPTION = OPTION_AVERAGE_SCANS
 };
 void setRampOption(long option);
@@ -263,12 +260,11 @@ void getScanSpanRange(struct ScanHeaderStruct *scanHeader, int *startScanNum, in
 // Useful for working with a range of MS1 scans.  Code can just ask for scan
 // headers and peaks as normal, and the cache takes care of shifting its range.
 
-struct ScanCacheStruct
-{
-    int seqNumStart;    // scan at which the cache starts
-    int size;           // number of scans in the cache
-    struct ScanHeaderStruct *headers;
-    RAMPREAL **peaks;
+struct ScanCacheStruct {
+  int seqNumStart;    // scan at which the cache starts
+  int size;           // number of scans in the cache
+  struct ScanHeaderStruct *headers;
+  RAMPREAL **peaks;
 };
 
 // create a chache struct

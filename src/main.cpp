@@ -25,11 +25,10 @@ using namespace std;
 #include "Caller.h"
 #include "Globals.h"
 
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
   Caller *pCaller = new Caller();
   int retVal = -1;
-  if(pCaller->parseOptions(argc,argv))
-  {
+  if(pCaller->parseOptions(argc,argv)) {
     retVal = pCaller->run();
   }
   delete pCaller;

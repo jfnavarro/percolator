@@ -18,12 +18,10 @@
 #include <cmath>
 #include "MassHandler.h"
 
-MassHandler::MassHandler()
-{
+MassHandler::MassHandler() {
 }
 
-MassHandler::~MassHandler()
-{
+MassHandler::~MassHandler() {
 }
 
 bool MassHandler::monoisotopic=false;
@@ -33,8 +31,8 @@ double MassHandler::massDiff(double observedMass, double calculatedMass, unsigne
   double dm = observedMass-calculatedMass;
   if (monoisotopic) {
     double isodm = dm-1;
-    for(int isotope=0;isotope<5;++isotope) {
-  	  if (abs(isodm)>abs(dm+isotope))
+    for(int isotope=0; isotope<5; ++isotope) {
+      if (abs(isodm)>abs(dm+isotope))
         isodm = dm+isotope;
     }
     dm=isodm/calculatedMass;

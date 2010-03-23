@@ -29,7 +29,7 @@
 using namespace std;
 
 #ifdef HAVE_CONFIG_H
-  #include "config.h"
+#include "config.h"
 #endif
 
 #include "Option.h"
@@ -46,20 +46,22 @@ static double maxLambda = 0.5;
 bool PosteriorEstimator::reversed = false;
 bool PosteriorEstimator::pvalInput = false;
 
-PosteriorEstimator::PosteriorEstimator()
-{
+PosteriorEstimator::PosteriorEstimator() {
 }
 
-PosteriorEstimator::~PosteriorEstimator()
-{
+PosteriorEstimator::~PosteriorEstimator() {
 }
 
 pair<double,bool> make_my_pair(double d,bool b) {
   return make_pair(d,b);
 }
 
-class IsDecoy {public: bool operator() (const pair<double,bool>& aPair)
-    {return !aPair.second; }};
+class IsDecoy {
+public:
+  bool operator() (const pair<double,bool>& aPair) {
+    return !aPair.second;
+  }
+};
 
 bool isMixed(const pair<double,bool>& aPair) {
   return aPair.second;
@@ -69,7 +71,7 @@ bool isMixed(const pair<double,bool>& aPair) {
 template<class T> void bootstrap_old(const vector<T>& in, vector<T>& out) {
   out.clear();
   double n = in.size();
-  for (size_t ix=0;ix<n;++ix) {
+  for (size_t ix=0; ix<n; ++ix) {
     size_t draw = (size_t)((double)rand()/((double)RAND_MAX+(double)1)*n);
     out.push_back(in[draw]);
   }
@@ -82,7 +84,7 @@ template<class T> void bootstrap(const vector<T>& in, vector<T>& out, size_t max
   out.clear();
   double n = in.size();
   size_t num_draw = min(in.size(),max_size);
-  for (size_t ix=0;ix<num_draw;++ix) {
+  for (size_t ix=0; ix<num_draw; ++ix) {
     size_t draw = (size_t)((double)rand()/((double)RAND_MAX+(double)1)*n);
     out.push_back(in[draw]);
   }
@@ -90,7 +92,9 @@ template<class T> void bootstrap(const vector<T>& in, vector<T>& out, size_t max
   sort(out.begin(),out.end());
 }
 
-double mymin(double a,double b) {return a>b?b:a;}
+double mymin(double a,double b) {
+  return a>b?b:a;
+}
 
 void PosteriorEstimator::estimatePEP( vector<pair<double,bool> >& combined, double pi0, vector<double>& peps, bool includeNegativesInResult) {
   // Logistic regression on the data
@@ -101,7 +105,7 @@ void PosteriorEstimator::estimatePEP( vector<pair<double,bool> >& combined, doub
   vector<double> xvals(0);
 
   vector<pair<double,bool> >::const_iterator elem = combined.begin();
-  for(;elem != combined.end();++elem)
+  for(; elem != combined.end(); ++elem)
     if (elem->second) {
       xvals.push_back(elem->first);
       ++nTargets;
@@ -125,7 +129,7 @@ void PosteriorEstimator::estimatePEP( vector<pair<double,bool> >& combined, doub
   double top = min(1.0,factor*exp(*max_element(peps.begin(),peps.end())));
   vector<double>::iterator pep = peps.begin();
   bool crap = false;
-  for(;pep != peps.end();++pep) {
+  for(; pep != peps.end(); ++pep) {
     if (crap) {
       *pep = top;
       continue;
@@ -168,7 +172,7 @@ void PosteriorEstimator::finishStandalone(vector<pair<double,bool> >& combined, 
     getQValues(pi0,combined,q);
 
   vector<pair<double,bool> >::const_iterator elem = combined.begin();
-  for(;elem != combined.end();++elem)
+  for(; elem != combined.end(); ++elem)
     if (elem->second)
       xvals.push_back(elem->first);
 
@@ -176,21 +180,21 @@ void PosteriorEstimator::finishStandalone(vector<pair<double,bool> >& combined, 
   vector<double>::const_iterator qv = q.begin(),pep = peps.begin();
 
   if (resultFileName.empty()) {
-     cout << "Score\tPEP\tq-value" << endl;
-     for(;xval != xvals.end();++xval,++pep,++qv)
-	    cout << *xval << "\t" << *pep << "\t" << *qv << endl;
+    cout << "Score\tPEP\tq-value" << endl;
+    for(; xval != xvals.end(); ++xval,++pep,++qv)
+      cout << *xval << "\t" << *pep << "\t" << *qv << endl;
   } else {
-	     ofstream resultstream(resultFileName.c_str());
-	     resultstream << "Score\tPEP\tq-value" << endl;
-	     for(;xval != xvals.end();++xval,++pep,++qv)
-		    resultstream << *xval << "\t" << *pep << "\t" << *qv << endl;
-         resultstream.close();
+    ofstream resultstream(resultFileName.c_str());
+    resultstream << "Score\tPEP\tq-value" << endl;
+    for(; xval != xvals.end(); ++xval,++pep,++qv)
+      resultstream << *xval << "\t" << *pep << "\t" << *qv << endl;
+    resultstream.close();
   }
 }
 
 
 void PosteriorEstimator::binData(const vector<pair<double,bool> >& combined,
-  vector<double>& medians, vector<unsigned int>& negatives, vector<unsigned int>& sizes) {
+                                 vector<double>& medians, vector<unsigned int>& negatives, vector<unsigned int>& sizes) {
   // Create bins and count number of negatives in each bin
   size_t binsLeft = noIntevals;
   double targetedBinSize = max(floor(combined.size()/(double)(noIntevals)),1.0);
@@ -199,12 +203,13 @@ void PosteriorEstimator::binData(const vector<pair<double,bool> >& combined,
   size_t firstIx, pastIx = 0;
 
   while (pastIx<combined.size()) {
-  	while (((combined.size()-pastIx)/targetedBinSize<binsLeft) && binsLeft>1) --binsLeft;
+    while (((combined.size()-pastIx)/targetedBinSize<binsLeft) && binsLeft>1) --binsLeft;
     double binSize = max((combined.size()-pastIx)/(double)(binsLeft--),1.0);
-    firstIx = pastIx; pastIx = min(combined.size(),(size_t)(firstIx+binSize));
+    firstIx = pastIx;
+    pastIx = min(combined.size(),(size_t)(firstIx+binSize));
     // Handle ties
     while ((pastIx<combined.size()) &&
-          (combined[pastIx-1].first==combined[pastIx].first))
+           (combined[pastIx-1].first==combined[pastIx].first))
       ++pastIx;
     int inBin = pastIx-firstIx;
     assert(inBin>0);
@@ -215,9 +220,9 @@ void PosteriorEstimator::binData(const vector<pair<double,bool> >& combined,
       *(sizes.rbegin()) += inBin;
       *(negatives.rbegin()) += negInBin;
     } else {
-       medians.push_back(median);
-       sizes.push_back(inBin);
-       negatives.push_back(negInBin);
+      medians.push_back(median);
+      sizes.push_back(inBin);
+      negatives.push_back(negInBin);
     }
   }
   if(VERB>2) cerr << "Binned data into " << medians.size() << " bins for PEP calcuation" << endl;
@@ -226,7 +231,7 @@ void PosteriorEstimator::binData(const vector<pair<double,bool> >& combined,
 
 
 void PosteriorEstimator::getQValues(double pi0,
-     const vector<pair<double,bool> >& combined, vector<double>& q) {
+                                    const vector<pair<double,bool> >& combined, vector<double>& q) {
   // assuming combined sorted in decending order
   vector<pair<double,bool> >::const_iterator myPair = combined.begin();
   unsigned int nTargets = 0, nDecoys = 0;
@@ -246,11 +251,11 @@ void PosteriorEstimator::getQValues(double pi0,
 }
 
 void PosteriorEstimator::getQValuesFromP(double pi0,
-  const vector<double>& p, vector<double>& q) {
+    const vector<double>& p, vector<double>& q) {
   double m = (double) p.size();
   int nP = 1;
   // assuming combined sorted in decending order
-  for (vector<double>::const_iterator myP = p.begin();myP != p.end();++myP,++nP) {
+  for (vector<double>::const_iterator myP = p.begin(); myP != p.end(); ++myP,++nP) {
     q.push_back((*myP*m*pi0)/(double)nP);
   }
   partial_sum(q.rbegin(), q.rend(), q.rbegin(), mymin);
@@ -260,17 +265,18 @@ void PosteriorEstimator::getQValuesFromP(double pi0,
 
 
 void PosteriorEstimator::getPValues(
-     const vector<pair<double,bool> >& combined, vector<double>& p) {
+  const vector<pair<double,bool> >& combined, vector<double>& p) {
   // assuming combined sorted in best hit first order
   vector<pair<double,bool> >::const_iterator myPair = combined.begin();
   size_t nDecoys = 0, posSame =0, negSame =0;
   double prevScore = - 4711.4711; // number that hopefully never turn up first in sequence
   while(myPair != combined.end()) {
     if (myPair->first != prevScore) {
-      for (size_t ix=0;ix<posSame;++ix)
+      for (size_t ix=0; ix<posSame; ++ix)
         p.push_back((double)nDecoys+(((double)negSame)/(double)(posSame+1))*(ix+1));
       nDecoys += negSame;
-      negSame=0; posSame=0;
+      negSame=0;
+      posSame=0;
       prevScore = myPair->first;
     }
     if (myPair->second) {
@@ -349,21 +355,21 @@ void PosteriorEstimator::run() {
   vector<double> pvals;
   if (!pvalInput) {
     transform(tarIt,istream_iterator<double>(),back_inserter(combined),
-            bind2nd(ptr_fun(make_my_pair),true));
+              bind2nd(ptr_fun(make_my_pair),true));
     size_t targetSize = combined.size();
     transform(decIt,istream_iterator<double>(),back_inserter(combined),
-            bind2nd(ptr_fun(make_my_pair), false));
+              bind2nd(ptr_fun(make_my_pair), false));
     if(VERB>0) cerr << "Read " << targetSize << " target scores and " << (combined.size()-targetSize) << " decoy scores" << endl;
   } else {
     copy(tarIt,istream_iterator<double>(),back_inserter(pvals));
     sort(pvals.begin(),pvals.end());
     transform(pvals.begin(),pvals.end(),back_inserter(combined),
-            bind2nd(ptr_fun(make_my_pair),true));
-  	size_t nDec = pvals.size();
-  	double step = 1.0/2.0/(double)nDec;
-  	for (size_t ix=0; ix<nDec; ++ix)
-  	  combined.push_back(make_my_pair(step*(1+2*ix),false));
-  	reversed = true;
+              bind2nd(ptr_fun(make_my_pair),true));
+    size_t nDec = pvals.size();
+    double step = 1.0/2.0/(double)nDec;
+    for (size_t ix=0; ix<nDec; ++ix)
+      combined.push_back(make_my_pair(step*(1+2*ix),false));
+    reversed = true;
     if(VERB>0) cerr << "Read " << pvals.size() << " statistics" << endl;
   }
   if (reversed) {
@@ -374,11 +380,11 @@ void PosteriorEstimator::run() {
     // sorting in ascending order
     sort(combined.begin(),combined.end());
   else
-  // sorting in decending order
+    // sorting in decending order
     sort(combined.begin(),combined.end(),greater<pair<double,bool> >());
 
   if (!pvalInput)
-  	getPValues(combined,pvals);
+    getPValues(combined,pvals);
 
   double pi0 = estimatePi0(pvals);
   if(VERB>1) cerr << "Selecting pi_0=" << pi0 << endl;
@@ -401,7 +407,7 @@ string PosteriorEstimator::greeter() {
 }
 
 
-bool PosteriorEstimator::parseOptions(int argc, char **argv){
+bool PosteriorEstimator::parseOptions(int argc, char **argv) {
   // init
   ostringstream intro;
   intro << greeter() << endl;
@@ -417,28 +423,28 @@ bool PosteriorEstimator::parseOptions(int argc, char **argv){
   // finally parse and handle return codes (display help etc...)
 
   cmd.defineOption("v","verbose",
-    "Set verbosity of output: 0=no processing info, 5=all, default is 2",
-    "level");
+                   "Set verbosity of output: 0=no processing info, 5=all, default is 2",
+                   "level");
 
   cmd.defineOption("s","epsilon-step",
-    "The relative step size used as treshhold before cross validation error is calculated",
-    "value");
+                   "The relative step size used as treshhold before cross validation error is calculated",
+                   "value");
 
   cmd.defineOption("n","number-of-bins",
-    "The number of spline knots used when interpolating spline function. Default is 500.",
-    "bins");
+                   "The number of spline knots used when interpolating spline function. Default is 500.",
+                   "bins");
 
   cmd.defineOption("c","epsilon-cross-validation",
-    "The relative crossvalidation step size used as treshhold before ending the iterations",
-    "value");
+                   "The relative crossvalidation step size used as treshhold before ending the iterations",
+                   "value");
 
   cmd.defineOption("r","reverse",
-    "Indicating that the scoring mechanism is reversed, i.e., that low scores are better than higher scores",
-    "",TRUE_IF_SET);
+                   "Indicating that the scoring mechanism is reversed, i.e., that low scores are better than higher scores",
+                   "",TRUE_IF_SET);
 
   cmd.defineOption("o","output-file",
-    "Output results to file instead of stdout",
-    "file");
+                   "Output results to file instead of stdout",
+                   "file");
 
 
   cmd.parseArgs(argc, argv);
@@ -467,12 +473,12 @@ bool PosteriorEstimator::parseOptions(int argc, char **argv){
     PosteriorEstimator::setReversed(true);
 
   if (cmd.arguments.size()>2) {
-      cerr << "Too many arguments given" << endl;
-      cmd.help();
+    cerr << "Too many arguments given" << endl;
+    cmd.help();
   }
   if (cmd.arguments.size()==0) {
-      cerr << "No arguments given" << endl;
-      cmd.help();
+    cerr << "No arguments given" << endl;
+    cmd.help();
   }
   targetFile = cmd.arguments[0];
   if (cmd.arguments.size()==2)

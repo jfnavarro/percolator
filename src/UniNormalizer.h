@@ -17,15 +17,14 @@
 #ifndef UNINORMALIZER_H_
 #define UNINORMALIZER_H_
 
-class UniNormalizer : public Normalizer // virtual Normalizer
-{
+class UniNormalizer : public Normalizer { // virtual Normalizer
 public:
-	UniNormalizer();
-	virtual ~UniNormalizer();
-    virtual void setSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV, size_t numFeatures, size_t numRetentionFeatures);
- //	virtual void setPsmSet(vector<PSMDescription> & psms, size_t noFeat);
-    void unnormalizeweight(const vector<double>& in,vector<double>& out);
-    void normalizeweight(const vector<double>& in, vector<double>& out);
+  UniNormalizer();
+  virtual ~UniNormalizer();
+  virtual void setSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV, size_t numFeatures, size_t numRetentionFeatures);
+//	virtual void setPsmSet(vector<PSMDescription> & psms, size_t noFeat);
+  void unnormalizeweight(const vector<double>& in,vector<double>& out);
+  void normalizeweight(const vector<double>& in, vector<double>& out);
 };
 
 #endif /*UNINORMALIZER_H_*/

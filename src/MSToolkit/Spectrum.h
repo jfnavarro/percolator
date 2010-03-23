@@ -9,7 +9,7 @@
 using namespace std;
 
 class Spectrum {
- public:
+public:
   //Constructors & Destructors
   Spectrum();
   Spectrum(char*);
@@ -19,7 +19,7 @@ class Spectrum {
 
   //Operator Functions
   Spectrum& operator=(const Spectrum&);
-	Peak_T& operator[](const int&);
+  Peak_T& operator[](const int&);
 
   //Functions
   void	    			add(Peak_T&);
@@ -76,13 +76,13 @@ class Spectrum {
   vector<Peak_T>* getPeaks();
   //void setPeaks(vector<Peak_T> peaks);
   float getTotalIntensity();
- 
+
   //for debugging
   void printMe();
 
- protected:
+protected:
 
- //Data Members
+//Data Members
   vector<Peak_T> *vPeaks;
   vector<ZState> *vZ;
   int		          charge;

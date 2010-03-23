@@ -28,87 +28,87 @@ using namespace std;
 #include "StdvNormalizer.h"
 #include "Globals.h"
 
-StdvNormalizer::StdvNormalizer()
-{
+StdvNormalizer::StdvNormalizer() {
 }
 
-StdvNormalizer::~StdvNormalizer()
-{
+StdvNormalizer::~StdvNormalizer() {
 }
 
-void StdvNormalizer::unnormalizeweight(const vector<double>& in, vector<double>& out){
+void StdvNormalizer::unnormalizeweight(const vector<double>& in, vector<double>& out) {
   double sum = 0;
   unsigned int i=0;
-  for (;i<FeatureNames::getNumFeatures();i++) {
-  	out[i]=in[i]/div[i];
-  	sum+=sub[i]*in[i]/div[i];
+  for (; i<FeatureNames::getNumFeatures(); i++) {
+    out[i]=in[i]/div[i];
+    sum+=sub[i]*in[i]/div[i];
   }
   out[i]=in[i]-sum;
 }
 
-void StdvNormalizer::normalizeweight(const vector<double>& in, vector<double>& out){
+void StdvNormalizer::normalizeweight(const vector<double>& in, vector<double>& out) {
   double sum = 0;
   size_t i=0;
-  for (;i<FeatureNames::getNumFeatures();i++) {
-  	out[i]=in[i]*div[i];
-  	sum+=sub[i]*in[i];
+  for (; i<FeatureNames::getNumFeatures(); i++) {
+    out[i]=in[i]*div[i];
+    sum+=sub[i]*in[i];
   }
   out[i]=in[i]+sum;
 }
 
-void StdvNormalizer::setSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV, size_t nf, size_t nrf){
-  numFeatures = nf; numRetentionFeatures=nrf;
-  sub.resize(nf+nrf,0.0); div.resize(nf+nrf,0.0);
+void StdvNormalizer::setSet(vector<double *> & featuresV,vector<double *> & rtFeaturesV, size_t nf, size_t nrf) {
+  numFeatures = nf;
+  numRetentionFeatures=nrf;
+  sub.resize(nf+nrf,0.0);
+  div.resize(nf+nrf,0.0);
   double n=0.0;
   double * features;
   size_t ix;
   vector<double *>::iterator it=featuresV.begin();
-  for (;it!=featuresV.end();++it) {
+  for (; it!=featuresV.end(); ++it) {
     features = *it;
     n++;
-	for (ix=0;ix<numFeatures;++ix) {
-	  sub[ix]+=features[ix];
-	}
+    for (ix=0; ix<numFeatures; ++ix) {
+      sub[ix]+=features[ix];
+    }
   }
-  for (it=rtFeaturesV.begin();it!=rtFeaturesV.end();++it) {
+  for (it=rtFeaturesV.begin(); it!=rtFeaturesV.end(); ++it) {
     features = *it;
-    for (ix=numFeatures;ix<numFeatures+numRetentionFeatures;++ix) {
-        sub[ix]+=features[ix-numFeatures];
+    for (ix=numFeatures; ix<numFeatures+numRetentionFeatures; ++ix) {
+      sub[ix]+=features[ix-numFeatures];
     }
   }
   if (VERB>2) {
     cerr.precision(2);
     cerr << "Normalization factors" << endl << "Avg ";
   }
-  for (ix=0;ix<numFeatures+numRetentionFeatures;++ix) {
-  	if (n>0.0)
-     sub[ix]/=n;
-     if (VERB>2) cerr << "\t" << sub[ix];
+  for (ix=0; ix<numFeatures+numRetentionFeatures; ++ix) {
+    if (n>0.0)
+      sub[ix]/=n;
+    if (VERB>2) cerr << "\t" << sub[ix];
   }
-  for (it=featuresV.begin();it!=featuresV.end();++it) {
+  for (it=featuresV.begin(); it!=featuresV.end(); ++it) {
     features = *it;
-    for (ix=0;ix<numFeatures;++ix) {
+    for (ix=0; ix<numFeatures; ++ix) {
       if (!isfinite(features[ix]))
-          cerr << "Reached strange feature with val=" << features[ix] << " at col=" << ix << endl;
+        cerr << "Reached strange feature with val=" << features[ix] << " at col=" << ix << endl;
       double d = features[ix]-sub[ix];
       div[ix]+=d*d;
     }
   }
-  for (it=rtFeaturesV.begin();it!=rtFeaturesV.end();++it) {
+  for (it=rtFeaturesV.begin(); it!=rtFeaturesV.end(); ++it) {
     features = *it;
-    for (ix=numFeatures;ix<numFeatures+numRetentionFeatures;++ix) {
+    for (ix=numFeatures; ix<numFeatures+numRetentionFeatures; ++ix) {
       if (!isfinite(features[ix-numFeatures]))
-          cerr << "Reached strange feature with val=" << features[ix-numFeatures] << " at col=" << ix  << endl;
+        cerr << "Reached strange feature with val=" << features[ix-numFeatures] << " at col=" << ix  << endl;
       double d = features[ix-numFeatures]-sub[ix];
       div[ix]+=d*d;
     }
   }
   if (VERB>2) cerr << endl << "Stdv";
-  for (ix=0;ix<numFeatures+numRetentionFeatures;++ix) {
+  for (ix=0; ix<numFeatures+numRetentionFeatures; ++ix) {
     if (div[ix]<=0 || n==0) {
       div[ix]=1.0;
     } else {
-  	  div[ix]=sqrt(div[ix]/n);
+      div[ix]=sqrt(div[ix]/n);
     }
     if (VERB>2) cerr << "\t" << div[ix];
   }

@@ -49,13 +49,13 @@ enum MSActivation {
 };
 
 struct MSHeader {
-	char header[16][128];
+  char header[16][128];
 };
 
 struct MSScanInfo {
-	int scanNumber[2];
-	int numDataPoints;
-	int numZStates;
+  int scanNumber[2];
+  int numDataPoints;
+  int numZStates;
   float rTime;
   float IIT;
   float BPI;

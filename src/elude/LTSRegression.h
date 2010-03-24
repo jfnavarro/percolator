@@ -30,58 +30,58 @@
 
 using namespace std;
 
-struct dataPoint {
-  double x;
-  double y;
-  // absolute value of residual
-  double absr;
+struct dataPoint
+{
+	double x;
+	double y;
+	// absolute value of residual
+	double absr;
 };
 
-class LTSRegression {
-public:
-  LTSRegression();
-  ~LTSRegression();
-  // set the data points used for regression
-  void setData(vector<double> & x, vector<double> & y);
-  // construct an initial random p-subset; data will be sorted, and the first h elements are returned
-  vector<dataPoint> getInitialHSubset();
-  // fill the absolute values of residuals for all the data points using the line ax + b, with a = par.first, b = par.second
-  void fillResiduals(pair<double, double> par);
-  // fit a line using the least-squares method using h; return the a and b of the model
-  pair<double, double> fitLSLine(vector<dataPoint> h);
-  // perform a C-step starting with h (build the regression line, compute abs(residuals), sort data according to abs(residuals))
-  // it returns the new h
-  vector<dataPoint> performCstep(vector<dataPoint> h);
-  // predict the y values of x
-  double predict(double x) {
-    return ((regCoefficients.first * x) + regCoefficients.second);
-  }
-  // calculate the squares of the residuals
-  double calculateQ();
-  // apply LTS regression
-  void runLTS();
-  // get functions
-  vector<dataPoint> getDataPoints() {
-    return data;
-  };
-  pair<double, double> getRegCoefficients() {
-    return regCoefficients;
-  }
-  // printing functions
-  void printVector(vector<dataPoint> v);
-  void printDataPoints();
+class LTSRegression
+{
+	public:
+		LTSRegression();
+		~LTSRegression();
+		// set the coverage
+		static void setCoverage(double & h) { percentageH = h; }
+		// set the data points used for regression
+		void setData(vector<double> & x, vector<double> & y);
+		// construct an initial random p-subset; data will be sorted, and the first h elements are returned
+		vector<dataPoint> getInitialHSubset();
+    	// fill the absolute values of residuals for all the data points using the line ax + b, with a = par.first, b = par.second
+		void fillResiduals(pair<double, double> par);
+		// fit a line using the least-squares method using h; return the a and b of the model
+		pair<double, double> fitLSLine(vector<dataPoint> h);
+		// perform a C-step starting with h (build the regression line, compute abs(residuals), sort data according to abs(residuals))
+		// it returns the new h
+		vector<dataPoint> performCstep(vector<dataPoint> h);
+		// predict the y values of x
+		double predict(double x) { return ((regCoefficients.first * x) + regCoefficients.second); }
+		// calculate the squares of the residuals
+		double calculateQ();
+		// apply LTS regression
+		void runLTS();
+		// get functions
+		vector<dataPoint> getDataPoints() { return data; };
+		pair<double, double> getRegCoefficients() { return regCoefficients; }
+		// printing functions
+		void printVector(vector<dataPoint> v);
+		void printDataPoints();
 
-protected:
-  // the max number of initial sets H1 generated; be default we use 500 (as suggested in the article)
-  static int noSubsets;
-  // maximum difference to acheive convergence
-  static double epsilon;
-  // coverage (number of points used to generate the regression line); the default value will be 0.75*n
-  int h;
-  // data points
-  vector <dataPoint> data;
-  // the regression coefficients (y = ax + b => a, b are the coefficients)
-  pair<double, double> regCoefficients;
+	protected:
+		// the max number of initial sets H1 generated; be default we use 500 (as suggested in the article)
+	    static int noSubsets;
+	    // maximum difference to acheive convergence
+	    static double epsilon;
+	    // cardinal of H (percentage of the total number of points used to build the regression line)
+	    static double percentageH;
+	    // coverage (number of points used to generate the regression line); the default value will be 0.75*n
+	    int h;
+	    // data points
+	    vector <dataPoint> data;
+	    // the regression coefficients (y = ax + b => a, b are the coefficients)
+	    pair<double, double> regCoefficients;
 };
 
 #endif /* LTSREGRESSION_H_ */

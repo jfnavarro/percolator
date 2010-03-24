@@ -19,7 +19,6 @@ in created 'bin' directory (which can be found at the same level as 'src' folder
 In order to produce release version of the code, parameter
 '-DCMAKE_BUILD_TYPE=Release' should be given to cmake in building script file,
 for example: 'cmake -DCMAKE_BUILD_TYPE=Release ..'
-By default Debug configuration of programs is produced.
 
 In order to make source and distribution packages the following commands
 should be executed in created 'output' folder(after running 'cmake ..' in this folder):
